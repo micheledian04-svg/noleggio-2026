@@ -26,7 +26,7 @@ function formatTempo(t) {
 }
 
 function costoDisplay(n, tipologia) {
-  if (tipologia === 'ABBONATO') return 'Gratuito';
+  if (tipologia === 'ABBONATO' || tipologia === 'PRIVATO') return 'Gratuito';
   return '€' + (parseFloat(n) || 0).toFixed(2);
 }
 
@@ -36,7 +36,7 @@ function orarioIncoerente(n) {
 }
 
 function calcolaCosto(n) {
-  if (n.tipologia === 'ABBONATO') return 0;
+  if (n.tipologia === 'ABBONATO' || n.tipologia === 'PRIVATO') return 0;
   const prezzo = prezzi.find(p => p.tipo_imbarcazione === n.tipo_imbarcazione);
   if (!prezzo) return 0;
   const p = n.tessera === 'UNIVERSITARIO' ? parseFloat(prezzo.prezzo_studenti) : parseFloat(prezzo.prezzo_esterni);
@@ -452,6 +452,7 @@ function renderGiorno() {
               <select id="select-tipologia" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;">
                 <option value="NOLEGGIO">Noleggio</option>
                 <option value="ABBONATO">Abbonato</option>
+                <option value="PRIVATO">Privato</option>
               </select>
             </div>
             <div>
@@ -643,6 +644,7 @@ function apriModalNuovoNoleggio() {
         <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Tipologia</label><select id="modal-tipologia" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;">
           <option value="NOLEGGIO">Noleggio</option>
           <option value="ABBONATO">Abbonato</option>
+          <option value="PRIVATO">Privato</option>
         </select></div>
         <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Quantità</label><input type="number" id="modal-quantita" value="1" min="1" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
         <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Ora Uscita</label><input type="time" id="modal-ora-uscita" value="${timeNow}" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
@@ -753,6 +755,7 @@ async function apriModificaNoleggio(id) {
         <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Tipologia</label><select id="modal-tipologia" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;">
           <option value="NOLEGGIO" ${n.tipologia === 'NOLEGGIO' ? 'selected' : ''}>Noleggio</option>
           <option value="ABBONATO" ${n.tipologia === 'ABBONATO' ? 'selected' : ''}>Abbonato</option>
+          <option value="PRIVATO" ${n.tipologia === 'PRIVATO' ? 'selected' : ''}>Privato</option>
         </select></div>
         <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Quantità</label><input type="number" id="modal-quantita" value="${n.quantita || 1}" min="1" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
         <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Ora Uscita</label><input type="time" id="modal-ora-uscita" value="${esc(n.ora_uscita || '')}" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;"></div>

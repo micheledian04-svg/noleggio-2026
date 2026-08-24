@@ -130,7 +130,7 @@ BEGIN
   END IF;
 
   -- Calcola costo (tranne per ABBONATO)
-  IF NEW.tipologia = 'ABBONATO' THEN
+  IF NEW.tipologia IN ('ABBONATO', 'PRIVATO') THEN
     NEW.costo := 0;
   ELSIF NEW.ora_uscita IS NOT NULL AND NEW.ora_rientro IS NOT NULL THEN
     NEW.costo := calcola_costo(NEW.tipo_imbarcazione, NEW.tessera, NEW.tempo_decine);
