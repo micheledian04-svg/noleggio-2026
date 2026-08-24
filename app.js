@@ -14,6 +14,7 @@ let editingClienteId = null;
 let autocompleteTimer = null;
 let expandedCards = new Set();
 let searchNoleggiQuery = '';
+let filterSoloAperti = false;
 
 function esc(s) {
   if (s === null || s === undefined) return '';
@@ -406,9 +407,12 @@ function renderGiorno() {
   let noleggiHtml = '';
   if (giornataCorrente) {
     if (noleggiCorrenti.length > 0) {
-      const filtered = searchNoleggiQuery.trim()
-        ? noleggiCorrenti.filter(n => (n.nome_cognome || '').toLowerCase().includes(searchNoleggiQuery.toLowerCase()))
+      const filtered0 = filterSoloAperti
+        ? noleggiCorrenti.filter(n => !n.ora_rientro)
         : noleggiCorrenti;
+      const filtered = searchNoleggiQuery.trim()
+        ? filtered0.filter(n => (n.nome_cognome || '').toLowerCase().includes(searchNoleggiQuery.toLowerCase()))
+        : filtered0;
       noleggiHtml = `<div style="margin-bottom:12px;"><input type="text" id="search-noleggi" placeholder="🔍 Cerca per nome..." value="${esc(searchNoleggiQuery)}" oninput="cercaNoleggi(this.value)" style="width:100%;padding:10px 14px;border:2px solid #e5e7eb;border-radius:10px;font-size:14px;box-sizing:border-box;"></div><div id="lista-noleggi">${renderDesktopTable(filtered) + renderMobileCards(filtered)}</div>`;
     } else {
       noleggiHtml = '<div style="text-align:center;padding:40px;color:#9ca3af;">Nessun noleggio oggi</div>';
@@ -424,6 +428,7 @@ function renderGiorno() {
           <button class="btn btn-primary" onclick="goToday()">Oggi</button>
         </div>
         <div style="display:flex;gap:8px;">
+          <button class="btn ${filterSoloAperti ? 'btn-success' : 'btn-ghost'}" onclick="toggleSoloAperti()" title="Solo non rientrati">⏱ Aperti</button>
           <button class="btn btn-ghost" onclick="render()">🔄</button>
           ${!giornataCorrente ? `<button class="btn btn-success" onclick="creaGiornata()">+ Crea Giornata</button>` : ''}
         </div>
@@ -625,12 +630,20 @@ function cercaNoleggi(q) {
   searchNoleggiQuery = q;
   const container = document.getElementById('lista-noleggi');
   if (container) {
-    const filtered = q.trim()
-      ? noleggiCorrenti.filter(n => (n.nome_cognome || '').toLowerCase().includes(q.toLowerCase()))
+    let filtered = filterSoloAperti
+      ? noleggiCorrenti.filter(n => !n.ora_rientro)
       : noleggiCorrenti;
+    if (q.trim()) {
+      filtered = filtered.filter(n => (n.nome_cognome || '').toLowerCase().includes(q.toLowerCase()));
+    }
     container.innerHTML = renderDesktopTable(filtered) + renderMobileCards(filtered);
     startTimers();
   }
+}
+
+function toggleSoloAperti() {
+  filterSoloAperti = !filterSoloAperti;
+  render();
 }
 
 async function aggiungiNoleggio() {
