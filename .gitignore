@@ -1,0 +1,6 @@
+node_modules/
+package-lock.json
+serve.js
+migrate.js
+check_db.js
+icons/
