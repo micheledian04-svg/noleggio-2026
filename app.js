@@ -485,7 +485,7 @@ function renderGiorno() {
             </div>
             <div>
               <label style="font-size:12px;font-weight:600;color:#6b7280;">Imbarcazione</label>
-              <input type="text" id="input-imbarcazione-nr" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;" placeholder="Nr imbarcazione">
+              <input type="text" id="input-imbarcazione-nr" autocomplete="off" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;" placeholder="Nr imbarcazione">
             </div>
           </div>
           <button class="btn btn-success" style="margin-top:12px;width:100%;" onclick="aggiungiNoleggio()">➕ Aggiungi Noleggio</button>
@@ -665,7 +665,7 @@ function apriModalNuovoNoleggio() {
         <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Quantità</label><input type="number" id="modal-quantita" value="1" min="1" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
         <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Ora Uscita</label><input type="time" id="modal-ora-uscita" value="${timeNow}" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
         <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Staff</label><input type="text" id="modal-staff" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;" placeholder="Staff"></div>
-        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Imbarcazione</label><input type="text" id="modal-imbarcazione" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;" placeholder="Nr imbarcazione"></div>
+        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Imbarcazione</label><input type="text" id="modal-imbarcazione" autocomplete="off" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;" placeholder="Nr imbarcazione"></div>
       </div>
       <div style="display:flex;gap:8px;margin-top:16px;">
         <button class="btn btn-success" style="flex:1;" onclick="aggiungiNoleggioModal()">➕ Aggiungi</button>
