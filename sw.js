@@ -1,4 +1,4 @@
-const CACHE_NAME = 'noleggio-v4';
+const CACHE_NAME = 'noleggio-v5';
 const ASSETS = ['/', '/index.html', '/app.js', '/db.js', '/manifest.json', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', (e) => { self.skipWaiting(); });

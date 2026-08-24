@@ -17,7 +17,7 @@ function sbHeaders() {
 // INIT
 // =============================================
 async function initDB() {
-  db = await openIDB('noleggio2026', 2);
+  db = await openIDB('noleggio2026', 3);
   window.addEventListener('online', () => { isOnline = true; syncPending(); });
   window.addEventListener('offline', () => { isOnline = false; });
 }
