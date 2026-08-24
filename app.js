@@ -273,6 +273,7 @@ function logout() {
   stopTimers();
   if (autoRefreshTimer) { clearInterval(autoRefreshTimer); autoRefreshTimer = null; }
   if (autoSyncTimer) { clearInterval(autoSyncTimer); autoSyncTimer = null; }
+  stopRealtime();
   showLogin();
 }
 
@@ -294,6 +295,7 @@ async function init() {
   applyColors();
   toggleAutoRefresh();
   startAutoSync();
+  startRealtime();
   render();
 }
 

@@ -390,3 +390,40 @@ async function sha256(message) {
   const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
   return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
+
+// =============================================
+// REALTIME (Supabase WebSocket)
+// =============================================
+let sbClient = null;
+let sbChannel = null;
+
+function startRealtime() {
+  if (!window.supabase) return;
+  try {
+    sbClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    sbChannel = sbClient.channel('db-changes')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'noleggi' }, async () => {
+        if (typeof loadGiornoData === 'function' && typeof render === 'function') {
+          await loadGiornoData();
+          render();
+        }
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'giornate' }, async () => {
+        if (typeof loadGiornoData === 'function' && typeof render === 'function') {
+          await loadGiornoData();
+          render();
+        }
+      })
+      .subscribe();
+  } catch (e) {
+    console.error('Realtime error:', e);
+  }
+}
+
+function stopRealtime() {
+  if (sbClient) {
+    sbClient.removeAllChannels();
+    sbClient = null;
+    sbChannel = null;
+  }
+}
