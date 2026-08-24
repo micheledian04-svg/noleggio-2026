@@ -428,7 +428,7 @@ function renderGiorno() {
             <div style="font-size:12px;color:#6b7280;font-weight:600;">Dovuto</div>
           </div>
         </div>
-        <div style="background:white;border-radius:16px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.08);margin-bottom:20px;">
+        <div class="desktop-only" style="background:white;border-radius:16px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.08);margin-bottom:20px;">
           <h3 style="font-size:16px;font-weight:700;margin-bottom:12px;">➕ Nuovo Noleggio</h3>
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;">
             <div style="position:relative;">
@@ -474,6 +474,7 @@ function renderGiorno() {
           <button class="btn btn-success" style="margin-top:12px;width:100%;" onclick="aggiungiNoleggio()">➕ Aggiungi Noleggio</button>
         </div>
         ${noleggiHtml}
+        <button class="mobile-only" onclick="apriModalNuovoNoleggio()" style="position:fixed;bottom:90px;right:16px;width:56px;height:56px;border-radius:50%;background:#16a34a;color:white;font-size:28px;border:none;box-shadow:0 4px 12px rgba(0,0,0,0.25);cursor:pointer;z-index:100;display:flex;align-items:center;justify-content:center;">+</button>
       ` : `
         <div style="text-align:center;padding:60px 20px;color:#6b7280;">
           <div style="font-size:48px;margin-bottom:16px;">📅</div>
@@ -617,6 +618,77 @@ async function aggiungiNoleggio() {
   document.getElementById('input-imbarcazione-nr').value = '';
   document.getElementById('input-staff').value = '';
   document.getElementById('input-quantita').value = '1';
+  await render();
+}
+
+function apriModalNuovoNoleggio() {
+  const options = prezzi.map(p => `<option value="${esc(p.tipo_imbarcazione)}">${esc(p.tipo_imbarcazione)}</option>`).join('');
+  const now = new Date();
+  const timeNow = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.id = 'modal-nuovo-noleggio';
+  overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+  overlay.innerHTML = `
+    <div class="modal-content fade-in">
+      <h3 style="font-size:18px;font-weight:700;margin-bottom:16px;">➕ Nuovo Noleggio</h3>
+      <div style="display:grid;gap:12px;">
+        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Nome e Cognome</label><input type="text" id="modal-nome-cognome" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;" placeholder="Nome Cognome"></div>
+        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Tipo Imbarcazione</label><select id="modal-tipo" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;">${options}</select></div>
+        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Tessera</label><select id="modal-tessera" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;">
+          <option value="TESSERATO">Tesserato</option>
+          <option value="UNIVERSITARIO">Universitario</option>
+          <option value="NON TESSERATO">Non Tesserato</option>
+        </select></div>
+        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Tipologia</label><select id="modal-tipologia" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;">
+          <option value="NOLEGGIO">Noleggio</option>
+          <option value="ABBONATO">Abbonato</option>
+        </select></div>
+        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Quantità</label><input type="number" id="modal-quantita" value="1" min="1" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
+        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Ora Uscita</label><input type="time" id="modal-ora-uscita" value="${timeNow}" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
+        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Staff</label><input type="text" id="modal-staff" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;" placeholder="Staff"></div>
+        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Imbarcazione</label><input type="text" id="modal-imbarcazione" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;" placeholder="Nr imbarcazione"></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:16px;">
+        <button class="btn btn-success" style="flex:1;" onclick="aggiungiNoleggioModal()">➕ Aggiungi</button>
+        <button class="btn btn-ghost" style="flex:1;" onclick="document.getElementById('modal-nuovo-noleggio').remove()">Annulla</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+}
+
+async function aggiungiNoleggioModal() {
+  const nome = document.getElementById('modal-nome-cognome').value.trim();
+  const tipo = document.getElementById('modal-tipo').value;
+  const tessera = document.getElementById('modal-tessera').value;
+  const tipologia = document.getElementById('modal-tipologia').value;
+  const quantita = parseInt(document.getElementById('modal-quantita').value) || 1;
+  const oraUscita = document.getElementById('modal-ora-uscita').value;
+  const staff = document.getElementById('modal-staff').value.trim();
+  const imbarcazione = document.getElementById('modal-imbarcazione').value.trim();
+  if (!nome) { alert('Inserisci il nome'); return; }
+  if (!giornataCorrente) { alert('Crea prima una giornata'); return; }
+  const data = {
+    giornata_id: giornataCorrente.id,
+    nome_cognome: nome,
+    tipo_imbarcazione: tipo,
+    tessera,
+    tipologia,
+    quantita,
+    ora_uscita: oraUscita,
+    staff,
+    imbarcazione,
+    pagato: false,
+    attrezzatura: false
+  };
+  await createNoleggio(data);
+  const existing = await searchClienti(nome);
+  const exists = existing.some(c => (c.nome + ' ' + c.cognome).trim().toLowerCase() === nome.toLowerCase());
+  if (!exists) {
+    const parts = nome.split(' ');
+    await createCliente({ nome: parts[0] || nome, cognome: parts.slice(1).join(' ') || '', tessera: tessera || 'NON TESSERATO' });
+  }
+  document.getElementById('modal-nuovo-noleggio').remove();
   await render();
 }
 
