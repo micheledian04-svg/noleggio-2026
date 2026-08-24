@@ -7,7 +7,7 @@ let currentUser = null;
 let darkMode = localStorage.getItem('darkMode') === 'true';
 let showStats = localStorage.getItem('showStats') !== 'false';
 let showFormNoleggio = localStorage.getItem('showFormNoleggio') !== 'false';
-let autoRefreshSeconds = parseInt(localStorage.getItem('autoRefreshSeconds') || '30');
+let autoRefreshSeconds = parseInt(localStorage.getItem('autoRefreshSeconds') || '10');
 let autoRefreshTimer = null;
 let editingNoleggioId = null;
 let editingClienteId = null;
