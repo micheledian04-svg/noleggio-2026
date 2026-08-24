@@ -78,36 +78,31 @@ function applyDarkMode() {
     document.head.appendChild(existing);
   }
   if (darkMode) {
+    document.documentElement.setAttribute('data-theme', 'dark');
     existing.textContent = `
-      body { background: #0f172a !important; color: #e2e8f0 !important; }
-      .bg-gray-50 { background: #0f172a !important; }
-      .bg-white { background: #1e293b !important; }
-      .bg-gray-100 { background: #1e293b !important; }
-      .text-gray-900 { color: #f1f5f9 !important; }
-      .text-gray-800 { color: #e2e8f0 !important; }
-      .text-gray-700 { color: #cbd5e1 !important; }
-      .text-gray-600 { color: #94a3b8 !important; }
-      .text-gray-500 { color: #64748b !important; }
-      .text-gray-400 { color: #475569 !important; }
-      .border-gray-200 { border-color: #334155 !important; }
-      .border-gray-300 { border-color: #475569 !important; }
-      .bg-blue-50 { background: #172554 !important; }
-      .bg-green-50 { background: #052e16 !important; }
-      .bg-red-50 { background: #450a0a !important; }
-      .bg-yellow-50 { background: #422006 !important; }
-      .bg-gray-50 { background: #1e293b !important; }
-      .modal-content { background: #1e293b !important; color: #e2e8f0 !important; }
-      input, select, textarea { background: #334155 !important; color: #e2e8f0 !important; border-color: #475569 !important; }
-      .noleggio-card { background: #1e293b !important; color: #e2e8f0 !important; }
-      .noleggio-card .card-header .nome { color: #f1f5f9 !important; }
-      .noleggio-card.pagato { background: #052e16 !important; }
-      .noleggio-card.non-rientrato { background: #422006 !important; }
-      table { background: #1e293b !important; }
-      thead th { background: #334155 !important; color: #94a3b8 !important; }
-      tbody tr { border-color: #334155 !important; }
-      tbody tr:hover { background: #334155 !important; }
+      .bg-gray-50 { background: var(--bg-primary) !important; }
+      .bg-white { background: var(--bg-secondary) !important; }
+      .bg-gray-100 { background: var(--bg-secondary) !important; }
+      .text-gray-900 { color: var(--text-primary) !important; }
+      .text-gray-800 { color: var(--text-secondary) !important; }
+      .text-gray-700 { color: var(--text-secondary) !important; }
+      .text-gray-600 { color: var(--text-muted) !important; }
+      .text-gray-500 { color: var(--text-faint) !important; }
+      .text-gray-400 { color: var(--text-faint) !important; }
+      .border-gray-200 { border-color: var(--border-light) !important; }
+      .border-gray-300 { border-color: var(--border-medium) !important; }
+      .bg-blue-50 { background: var(--accent-blue-light) !important; }
+      .bg-green-50 { background: var(--accent-green-light) !important; }
+      .bg-red-50 { background: var(--accent-red-light) !important; }
+      .bg-yellow-50 { background: var(--accent-yellow-light) !important; }
+      table { background: var(--bg-card) !important; }
+      thead th { background: var(--bg-input) !important; color: var(--text-muted) !important; }
+      tbody tr { border-color: var(--border-light) !important; }
+      tbody tr:hover { background: var(--bg-hover) !important; }
+      .row-warning { background: var(--accent-yellow-bg) !important; }
     `;
   } else {
+    document.documentElement.removeAttribute('data-theme');
     existing.textContent = '';
   }
 }
@@ -204,13 +199,13 @@ function setupAutocomplete(inputId) {
       if (results.length === 0) return;
       dd = document.createElement('div');
       dd.id = inputId + '-dropdown';
-      dd.style.cssText = 'position:absolute;z-index:50;background:white;border:1px solid #e5e7eb;border-radius:8px;max-height:200px;overflow-y:auto;width:100%;box-shadow:0 4px 12px rgba(0,0,0,0.1);';
+      dd.style.cssText = 'position:absolute;z-index:50;background:var(--bg-card);border:1px solid var(--border-light);border-radius:8px;max-height:200px;overflow-y:auto;width:100%;box-shadow:0 4px 12px rgba(0,0,0,0.1);color:var(--text-primary);';
       results.forEach(c => {
         const item = document.createElement('div');
-        item.style.cssText = 'padding:10px 12px;cursor:pointer;border-bottom:1px solid #f3f4f6;font-size:14px;';
+        item.style.cssText = 'padding:10px 12px;cursor:pointer;border-bottom:1px solid var(--border-light);font-size:14px;background:var(--bg-card);color:var(--text-primary);';
         item.textContent = c.nome + ' ' + c.cognome;
-        item.addEventListener('mouseenter', () => item.style.background = '#f3f4f6');
-        item.addEventListener('mouseleave', () => item.style.background = 'white');
+        item.addEventListener('mouseenter', () => item.style.background = 'var(--bg-hover)');
+        item.addEventListener('mouseleave', () => item.style.background = 'var(--bg-card)');
         item.addEventListener('click', () => {
           input.value = c.nome + ' ' + c.cognome;
           dd.remove();
@@ -233,19 +228,19 @@ async function showLogin() {
       <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-sm fade-in">
         <div class="text-center mb-8">
           <div style="font-size:48px;margin-bottom:8px;">⛵</div>
-          <h1 style="font-size:24px;font-weight:800;color:#1e40af;">Noleggio 2026</h1>
-          <p style="color:#6b7280;font-size:14px;margin-top:4px;">Gestione Noleggi</p>
+          <h1 style="font-size:24px;font-weight:800;color:var(--accent-blue-dark);">Noleggio 2026</h1>
+          <p style="color:var(--text-muted);font-size:14px;margin-top:4px;">Gestione Noleggi</p>
         </div>
-        <div id="login-error" style="display:none;background:#fee2e2;color:#991b1b;padding:10px;border-radius:8px;font-size:13px;margin-bottom:16px;text-align:center;"></div>
+        <div id="login-error" style="display:none;background:var(--accent-red-light);color:#991b1b;padding:10px;border-radius:8px;font-size:13px;margin-bottom:16px;text-align:center;"></div>
         <div style="margin-bottom:16px;">
-          <label style="display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px;">Username</label>
-          <input type="text" id="login-user" style="width:100%;padding:10px 14px;border:2px solid #e5e7eb;border-radius:10px;font-size:14px;outline:none;box-sizing:border-box;" placeholder="Username" autocomplete="username">
+          <label style="display:block;font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:6px;">Username</label>
+          <input type="text" id="login-user" style="width:100%;padding:10px 14px;border:2px solid var(--border-light);border-radius:10px;font-size:14px;outline:none;box-sizing:border-box;background:var(--bg-input);color:var(--text-primary);" placeholder="Username" autocomplete="username">
         </div>
         <div style="margin-bottom:24px;">
-          <label style="display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px;">Password</label>
-          <input type="password" id="login-pass" style="width:100%;padding:10px 14px;border:2px solid #e5e7eb;border-radius:10px;font-size:14px;outline:none;box-sizing:border-box;" placeholder="Password" autocomplete="current-password">
+          <label style="display:block;font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:6px;">Password</label>
+          <input type="password" id="login-pass" style="width:100%;padding:10px 14px;border:2px solid var(--border-light);border-radius:10px;font-size:14px;outline:none;box-sizing:border-box;background:var(--bg-input);color:var(--text-primary);" placeholder="Password" autocomplete="current-password">
         </div>
-        <button onclick="doLogin()" style="width:100%;padding:12px;background:#2563eb;color:white;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;">Accedi</button>
+        <button onclick="doLogin()" style="width:100%;padding:12px;background:var(--accent-blue);color:white;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;">Accedi</button>
       </div>
     </div>`;
   document.getElementById('login-pass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
@@ -430,9 +425,9 @@ function renderGiorno() {
       const filtered = searchNoleggiQuery.trim()
         ? filtered0.filter(n => (n.nome_cognome || '').toLowerCase().includes(searchNoleggiQuery.toLowerCase()))
         : filtered0;
-      noleggiHtml = `<div style="margin-bottom:12px;"><input type="text" id="search-noleggi" placeholder="🔍 Cerca per nome..." value="${esc(searchNoleggiQuery)}" oninput="cercaNoleggi(this.value)" style="width:100%;padding:10px 14px;border:2px solid #e5e7eb;border-radius:10px;font-size:14px;box-sizing:border-box;"></div><div id="lista-noleggi">${renderDesktopTable(filtered) + renderMobileCards(filtered)}</div>`;
+      noleggiHtml = `<div style="margin-bottom:12px;"><input type="text" id="search-noleggi" placeholder="🔍 Cerca per nome..." value="${esc(searchNoleggiQuery)}" oninput="cercaNoleggi(this.value)" style="width:100%;padding:10px 14px;border:2px solid var(--border-light);border-radius:10px;font-size:14px;box-sizing:border-box;background:var(--bg-input);color:var(--text-primary);"></div><div id="lista-noleggi">${renderDesktopTable(filtered) + renderMobileCards(filtered)}</div>`;
     } else {
-      noleggiHtml = '<div style="text-align:center;padding:40px;color:#9ca3af;">Nessun noleggio oggi</div>';
+      noleggiHtml = '<div style="text-align:center;padding:40px;color:var(--text-faint);">Nessun noleggio oggi</div>';
     }
   }
   return `
@@ -440,7 +435,7 @@ function renderGiorno() {
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:16px;">
         <div style="display:flex;align-items:center;gap:8px;">
           <button class="btn btn-ghost" onclick="prevDay()">◀</button>
-          <input type="date" value="${esc(currentData)}" onchange="pickDate(this.value)" style="padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;">
+          <input type="date" value="${esc(currentData)}" onchange="pickDate(this.value)" style="padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;background:var(--bg-input);color:var(--text-primary);">
           <button class="btn btn-ghost" onclick="nextDay()">▶</button>
           <button class="btn btn-primary" onclick="goToday()">Oggi</button>
         </div>
@@ -450,78 +445,78 @@ function renderGiorno() {
           ${!giornataCorrente ? `<button class="btn btn-success" onclick="creaGiornata()">+ Crea Giornata</button>` : ''}
         </div>
       </div>
-      <div style="font-size:22px;font-weight:700;margin-bottom:16px;color:#1e40af;">📅 ${formatDateIt(currentData)}</div>
+      <div style="font-size:22px;font-weight:700;margin-bottom:16px;color:var(--accent-blue-dark);">📅 ${formatDateIt(currentData)}</div>
       ${giornataCorrente ? `
         ${showStats ? `
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px;">
-          <div style="background:white;border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.08);text-align:center;">
-            <div style="font-size:28px;font-weight:800;color:#2563eb;">${stats.noleggi}</div>
-            <div style="font-size:12px;color:#6b7280;font-weight:600;">Noleggi</div>
+          <div style="background:var(--bg-card);border-radius:12px;padding:16px;box-shadow:var(--shadow-md);text-align:center;">
+            <div style="font-size:28px;font-weight:800;color:var(--accent-blue);">${stats.noleggi}</div>
+            <div style="font-size:12px;color:var(--text-muted);font-weight:600;">Noleggi</div>
           </div>
-          <div style="background:white;border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.08);text-align:center;">
-            <div style="font-size:28px;font-weight:800;color:#16a34a;">€${stats.totale.toFixed(2)}</div>
-            <div style="font-size:12px;color:#6b7280;font-weight:600;">Totale</div>
+          <div style="background:var(--bg-card);border-radius:12px;padding:16px;box-shadow:var(--shadow-md);text-align:center;">
+            <div style="font-size:28px;font-weight:800;color:var(--accent-green);">€${stats.totale.toFixed(2)}</div>
+            <div style="font-size:12px;color:var(--text-muted);font-weight:600;">Totale</div>
           </div>
-          <div style="background:white;border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.08);text-align:center;">
+          <div style="background:var(--bg-card);border-radius:12px;padding:16px;box-shadow:var(--shadow-md);text-align:center;">
             <div style="font-size:28px;font-weight:800;color:#15803d;">€${stats.incassato.toFixed(2)}</div>
-            <div style="font-size:12px;color:#6b7280;font-weight:600;">Incassato</div>
+            <div style="font-size:12px;color:var(--text-muted);font-weight:600;">Incassato</div>
           </div>
-          <div style="background:white;border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.08);text-align:center;">
-            <div style="font-size:28px;font-weight:800;color:#dc2626;">€${stats.dovuto.toFixed(2)}</div>
-            <div style="font-size:12px;color:#6b7280;font-weight:600;">Dovuto</div>
+          <div style="background:var(--bg-card);border-radius:12px;padding:16px;box-shadow:var(--shadow-md);text-align:center;">
+            <div style="font-size:28px;font-weight:800;color:var(--accent-red);">€${stats.dovuto.toFixed(2)}</div>
+            <div style="font-size:12px;color:var(--text-muted);font-weight:600;">Dovuto</div>
           </div>
         </div>` : ''}
         ${showFormNoleggio ? `
-        <div class="desktop-only" style="background:white;border-radius:16px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.08);margin-bottom:20px;">
+        <div class="desktop-only" style="background:var(--bg-card);border-radius:16px;padding:16px;box-shadow:var(--shadow-md);margin-bottom:20px;">
           <h3 style="font-size:16px;font-weight:700;margin-bottom:12px;">➕ Nuovo Noleggio</h3>
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;">
             <div style="position:relative;">
-              <label style="font-size:12px;font-weight:600;color:#6b7280;">Nome e Cognome</label>
-              <input type="text" id="input-nome-cognome" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;" placeholder="Nome Cognome">
+              <label style="font-size:12px;font-weight:600;color:var(--text-muted);">Nome e Cognome</label>
+              <input type="text" id="input-nome-cognome" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;box-sizing:border-box;background:var(--bg-input);color:var(--text-primary);" placeholder="Nome Cognome">
             </div>
             <div>
-              <label style="font-size:12px;font-weight:600;color:#6b7280;">Tipo Imbarcazione</label>
-              <select id="select-tipo" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;">${options}</select>
+              <label style="font-size:12px;font-weight:600;color:var(--text-muted);">Tipo Imbarcazione</label>
+              <select id="select-tipo" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;background:var(--bg-input);color:var(--text-primary);">${options}</select>
             </div>
             <div>
-              <label style="font-size:12px;font-weight:600;color:#6b7280;">Tessera</label>
-              <select id="select-tessera" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;">
+              <label style="font-size:12px;font-weight:600;color:var(--text-muted);">Tessera</label>
+              <select id="select-tessera" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;background:var(--bg-input);color:var(--text-primary);">
                 <option value="TESSERATO">Tesserato</option>
                 <option value="UNIVERSITARIO">Universitario</option>
                 <option value="NON TESSERATO">Non Tesserato</option>
               </select>
             </div>
             <div>
-              <label style="font-size:12px;font-weight:600;color:#6b7280;">Tipologia</label>
-              <select id="select-tipologia" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;">
+              <label style="font-size:12px;font-weight:600;color:var(--text-muted);">Tipologia</label>
+              <select id="select-tipologia" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;background:var(--bg-input);color:var(--text-primary);">
                 <option value="NOLEGGIO">Noleggio</option>
                 <option value="ABBONATO">Abbonato</option>
                 <option value="PRIVATO">Privato</option>
               </select>
             </div>
             <div>
-              <label style="font-size:12px;font-weight:600;color:#6b7280;">Quantità</label>
-              <input type="number" id="input-quantita" value="1" min="1" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;">
+              <label style="font-size:12px;font-weight:600;color:var(--text-muted);">Quantità</label>
+              <input type="number" id="input-quantita" value="1" min="1" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;box-sizing:border-box;background:var(--bg-input);color:var(--text-primary);">
             </div>
             <div>
-              <label style="font-size:12px;font-weight:600;color:#6b7280;">Ora Uscita</label>
-              <input type="time" id="input-ora-uscita" value="${timeNow}" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;">
+              <label style="font-size:12px;font-weight:600;color:var(--text-muted);">Ora Uscita</label>
+              <input type="time" id="input-ora-uscita" value="${timeNow}" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;box-sizing:border-box;background:var(--bg-input);color:var(--text-primary);">
             </div>
             <div>
-              <label style="font-size:12px;font-weight:600;color:#6b7280;">Staff</label>
-              <input type="text" id="input-staff" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;" placeholder="Staff">
+              <label style="font-size:12px;font-weight:600;color:var(--text-muted);">Staff</label>
+              <input type="text" id="input-staff" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;box-sizing:border-box;background:var(--bg-input);color:var(--text-primary);" placeholder="Staff">
             </div>
             <div>
-              <label style="font-size:12px;font-weight:600;color:#6b7280;">Imbarcazione</label>
-              <input type="text" id="input-imbarcazione-nr" autocomplete="off" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;" placeholder="Nr imbarcazione">
+              <label style="font-size:12px;font-weight:600;color:var(--text-muted);">Imbarcazione</label>
+              <input type="text" id="input-imbarcazione-nr" autocomplete="off" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;box-sizing:border-box;background:var(--bg-input);color:var(--text-primary);" placeholder="Nr imbarcazione">
             </div>
           </div>
           <button class="btn btn-success" style="margin-top:12px;width:100%;" onclick="aggiungiNoleggio()">➕ Aggiungi Noleggio</button>
         </div>` : ''}
         ${noleggiHtml}
-        <button class="${showFormNoleggio ? 'mobile-only' : ''}" onclick="apriModalNuovoNoleggio()" style="position:fixed;bottom:90px;right:16px;width:56px;height:56px;border-radius:50%;background:#16a34a;color:white;font-size:28px;border:none;box-shadow:0 4px 12px rgba(0,0,0,0.25);cursor:pointer;z-index:100;display:flex;align-items:center;justify-content:center;">+</button>
+        <button class="${showFormNoleggio ? 'mobile-only' : ''}" onclick="apriModalNuovoNoleggio()" style="position:fixed;bottom:90px;right:16px;width:56px;height:56px;border-radius:50%;background:var(--accent-green);color:white;font-size:28px;border:none;box-shadow:0 4px 12px rgba(0,0,0,0.25);cursor:pointer;z-index:100;display:flex;align-items:center;justify-content:center;">+</button>
       ` : `
-        <div style="text-align:center;padding:60px 20px;color:#6b7280;">
+        <div style="text-align:center;padding:60px 20px;color:var(--text-muted);">
           <div style="font-size:48px;margin-bottom:16px;">📅</div>
           <div style="font-size:18px;font-weight:600;margin-bottom:8px;">Nessuna giornata per ${formatDateIt(currentData)}</div>
           <div style="font-size:14px;">Crea una giornata per iniziare ad aggiungere noleggi</div>
@@ -539,44 +534,44 @@ function renderDesktopTable(noleggi = noleggiCorrenti) {
     const timerHtml = !n.ora_rientro ? `<span class="live-timer" data-ora-uscita="${esc(n.ora_uscita || '')}"></span>` : '-';
     const tempoHtml = n.ora_uscita && n.ora_rientro ? formatTempo(((parseInt(n.ora_rientro.split(':')[0]) * 60 + parseInt(n.ora_rientro.split(':')[1])) - (parseInt(n.ora_uscita.split(':')[0]) * 60 + parseInt(n.ora_uscita.split(':')[1]))) / 60) : '-';
     rows += `
-      <tr class="${rowClass}" style="border-bottom:1px solid #f3f4f6;">
-        <td style="padding:10px;font-size:13px;font-weight:600;color:#9ca3af;">${i + 1}</td>
+      <tr class="${rowClass}" style="border-bottom:1px solid var(--border-light);">
+        <td style="padding:10px;font-size:13px;font-weight:600;color:var(--text-faint);">${i + 1}</td>
         <td style="padding:10px;font-size:14px;font-weight:600;">${esc(n.nome_cognome)}</td>
-        <td style="padding:10px;font-size:13px;"><span style="padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600;background:#dbeafe;color:#1e40af;">${esc(n.tipo_imbarcazione)}</span></td>
+        <td style="padding:10px;font-size:13px;"><span style="padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600;background:var(--accent-blue-light);color:var(--accent-blue-dark);">${esc(n.tipo_imbarcazione)}</span></td>
         <td style="padding:10px;font-size:13px;">${esc(n.imbarcazione || '-')}</td>
         <td style="padding:10px;font-size:13px;text-align:center;">${n.quantita || 1}</td>
         <td style="padding:10px;font-size:13px;font-family:monospace;font-weight:600;">${esc(n.ora_uscita || '-')}</td>
         <td style="padding:10px;">${n.ora_rientro ?
-          `<input type="time" value="${esc(n.ora_rientro)}" onchange="modificaRientro('${n.id}',this.value)" style="padding:4px 8px;border:2px solid #86efac;border-radius:6px;font-size:13px;width:110px;">` :
+          `<input type="time" value="${esc(n.ora_rientro)}" onchange="modificaRientro('${n.id}',this.value)" style="padding:4px 8px;border:2px solid #86efac;border-radius:6px;font-size:13px;width:110px;background:var(--bg-input);color:var(--text-primary);">` :
           `<button class="btn btn-primary" style="padding:4px 10px;font-size:12px;" onclick="registraRientro('${n.id}')">Rientro</button>`}</td>
         <td style="padding:10px;font-size:13px;">${timerHtml}</td>
         <td style="padding:10px;font-size:13px;font-weight:600;">${tempoHtml}</td>
-        <td style="padding:10px;font-size:14px;font-weight:700;color:${n.pagato ? '#16a34a' : '#dc2626'};">${costoDisplay(costo, n.tipologia)}</td>
+        <td style="padding:10px;font-size:14px;font-weight:700;color:${n.pagato ? 'var(--accent-green)' : 'var(--accent-red)'};">${costoDisplay(costo, n.tipologia)}</td>
         <td style="padding:10px;text-align:center;"><button onclick="togglePagato('${n.id}',${n.pagato})" style="cursor:pointer;border:none;background:none;font-size:18px;">${n.pagato ? '✅' : '⬜'}</button></td>
         <td style="padding:10px;text-align:center;"><button onclick="toggleAttrezzatura('${n.id}',${n.attrezzatura})" style="cursor:pointer;border:none;background:none;font-size:18px;">${n.attrezzatura ? '✅' : '⬜'}</button></td>
         <td style="padding:10px;text-align:center;"><button onclick="apriModificaNoleggio('${n.id}')" style="cursor:pointer;border:none;background:none;color:#d97706;font-size:16px;">✏️</button></td>
-        <td style="padding:10px;text-align:center;"><button onclick="eliminaNoleggio('${n.id}')" style="cursor:pointer;border:none;background:none;color:#dc2626;font-size:16px;">🗑️</button></td>
+        <td style="padding:10px;text-align:center;"><button onclick="eliminaNoleggio('${n.id}')" style="cursor:pointer;border:none;background:none;color:var(--accent-red);font-size:16px;">🗑️</button></td>
       </tr>`;
   });
   return `
-    <div style="background:white;border-radius:16px;box-shadow:0 1px 3px rgba(0,0,0,0.08);overflow-x:auto;margin-bottom:20px;" class="desktop-only">
+    <div style="background:var(--bg-card);border-radius:16px;box-shadow:var(--shadow-md);overflow-x:auto;margin-bottom:20px;" class="desktop-only">
       <table style="width:100%;border-collapse:collapse;font-size:13px;">
         <thead>
-          <tr style="border-bottom:2px solid #e5e7eb;">
-            <th style="padding:12px 10px;text-align:left;color:#6b7280;font-size:12px;">#</th>
-            <th style="padding:12px 10px;text-align:left;color:#6b7280;font-size:12px;">Nome</th>
-            <th style="padding:12px 10px;text-align:left;color:#6b7280;font-size:12px;">Tipo</th>
-            <th style="padding:12px 10px;text-align:left;color:#6b7280;font-size:12px;">Imbarc.</th>
-            <th style="padding:12px 10px;text-align:center;color:#6b7280;font-size:12px;">Qta</th>
-            <th style="padding:12px 10px;text-align:left;color:#6b7280;font-size:12px;">Uscita</th>
-            <th style="padding:12px 10px;text-align:left;color:#6b7280;font-size:12px;">Rientro</th>
-            <th style="padding:12px 10px;text-align:left;color:#6b7280;font-size:12px;">Timer</th>
-            <th style="padding:12px 10px;text-align:left;color:#6b7280;font-size:12px;">Tempo</th>
-            <th style="padding:12px 10px;text-align:left;color:#6b7280;font-size:12px;">Costo</th>
-            <th style="padding:12px 10px;text-align:center;color:#6b7280;font-size:12px;">Pagato</th>
-            <th style="padding:12px 10px;text-align:center;color:#6b7280;font-size:12px;">Attrezz.</th>
-            <th style="padding:12px 10px;text-align:center;color:#6b7280;font-size:12px;">Modifica</th>
-            <th style="padding:12px 10px;text-align:center;color:#6b7280;font-size:12px;">Elimina</th>
+          <tr style="border-bottom:2px solid var(--border-light);">
+            <th style="padding:12px 10px;text-align:left;color:var(--text-muted);font-size:12px;">#</th>
+            <th style="padding:12px 10px;text-align:left;color:var(--text-muted);font-size:12px;">Nome</th>
+            <th style="padding:12px 10px;text-align:left;color:var(--text-muted);font-size:12px;">Tipo</th>
+            <th style="padding:12px 10px;text-align:left;color:var(--text-muted);font-size:12px;">Imbarc.</th>
+            <th style="padding:12px 10px;text-align:center;color:var(--text-muted);font-size:12px;">Qta</th>
+            <th style="padding:12px 10px;text-align:left;color:var(--text-muted);font-size:12px;">Uscita</th>
+            <th style="padding:12px 10px;text-align:left;color:var(--text-muted);font-size:12px;">Rientro</th>
+            <th style="padding:12px 10px;text-align:left;color:var(--text-muted);font-size:12px;">Timer</th>
+            <th style="padding:12px 10px;text-align:left;color:var(--text-muted);font-size:12px;">Tempo</th>
+            <th style="padding:12px 10px;text-align:left;color:var(--text-muted);font-size:12px;">Costo</th>
+            <th style="padding:12px 10px;text-align:center;color:var(--text-muted);font-size:12px;">Pagato</th>
+            <th style="padding:12px 10px;text-align:center;color:var(--text-muted);font-size:12px;">Attrezz.</th>
+            <th style="padding:12px 10px;text-align:center;color:var(--text-muted);font-size:12px;">Modifica</th>
+            <th style="padding:12px 10px;text-align:center;color:var(--text-muted);font-size:12px;">Elimina</th>
           </tr>
         </thead>
         <tbody>${rows}</tbody>
@@ -594,38 +589,38 @@ function renderMobileCards(noleggi = noleggiCorrenti) {
     if (n.ora_rientro && !expandedCards.has(n.id)) {
       cards += `
         <div class="noleggio-card-compact" onclick="toggleCardExpand(${n.id})" style="border-left-color:#22c55e;">
-          <span style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100px;">${esc(n.nome_cognome)}</span>
+          <span style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100px;color:var(--text-primary);">${esc(n.nome_cognome)}</span>
           <span class="orario">${esc(n.ora_uscita || '-')} <span class="freccia">→</span> ${esc(n.ora_rientro)}</span>
-          ${tempoHtml ? `<span style="font-size:12px;color:#6b7280;">${tempoHtml}</span>` : ''}
-          <span style="font-weight:700;color:${n.pagato ? '#16a34a' : '#dc2626'};">${costoDisplay(costo, n.tipologia)}</span>
+          ${tempoHtml ? `<span style="font-size:12px;color:var(--text-muted);">${tempoHtml}</span>` : ''}
+          <span style="font-weight:700;color:${n.pagato ? 'var(--accent-green)' : 'var(--accent-red)'};">${costoDisplay(costo, n.tipologia)}</span>
           <span>${n.pagato ? '✅' : '⬜'}</span>
         </div>`;
       return;
     }
     const timerHtml = !n.ora_rientro ? `<span class="live-timer" data-ora-uscita="${esc(n.ora_uscita || '')}"></span>` : '';
     cards += `
-      <div class="noleggio-card ${cardClass}" style="border-left-color:${n.pagato ? '#22c55e' : (incoerente ? '#f59e0b' : '#e5e7eb')};">
-        ${n.ora_rientro && expandedCards.has(n.id) ? `<div style="cursor:pointer;font-size:11px;color:#6b7280;margin-bottom:4px;" onclick="toggleCardExpand(${n.id})">▲ Chiudi</div>` : ''}
+      <div class="noleggio-card ${cardClass}" style="border-left-color:${n.pagato ? '#22c55e' : (incoerente ? '#f59e0b' : 'var(--border-light)')};">
+        ${n.ora_rientro && expandedCards.has(n.id) ? `<div style="cursor:pointer;font-size:11px;color:var(--text-muted);margin-bottom:4px;" onclick="toggleCardExpand(${n.id})">▲ Chiudi</div>` : ''}
         <div class="card-header">
           <span class="num">#${i + 1}</span>
           <span class="nome">${esc(n.nome_cognome)}</span>
         </div>
         <div class="card-row">
-          <span class="tag" style="background:#dbeafe;color:#1e40af;">${esc(n.tipo_imbarcazione)}</span>
-          ${n.tessera ? `<span class="tag" style="background:#f3e8ff;color:#7c3aed;">${esc(n.tessera)}</span>` : ''}
-          <span class="tag" style="background:#fef3c7;color:#92400e;">×${n.quantita || 1}</span>
+          <span class="tag" style="background:var(--accent-blue-light);color:var(--accent-blue-dark);">${esc(n.tipo_imbarcazione)}</span>
+          ${n.tessera ? `<span class="tag" style="background:var(--accent-purple-light);color:#7c3aed;">${esc(n.tessera)}</span>` : ''}
+          <span class="tag" style="background:var(--accent-yellow-light);color:#92400e;">×${n.quantita || 1}</span>
         </div>
         <div class="card-row">
           <span class="orario">${esc(n.ora_uscita || '-')}</span>
           <span class="freccia">→</span>
           ${n.ora_rientro ?
-            `<input type="time" value="${esc(n.ora_rientro)}" onchange="modificaRientro('${n.id}',this.value)" style="padding:4px 8px;border:2px solid #86efac;border-radius:6px;font-size:13px;width:110px;">` :
+            `<input type="time" value="${esc(n.ora_rientro)}" onchange="modificaRientro('${n.id}',this.value)" style="padding:4px 8px;border:2px solid #86efac;border-radius:6px;font-size:13px;width:110px;background:var(--bg-input);color:var(--text-primary);">` :
             `<button class="btn btn-primary" style="padding:4px 10px;font-size:12px;" onclick="registraRientro('${n.id}')">Rientro</button>`}
-          ${timerHtml ? `<span style="margin-left:8px;color:#2563eb;font-weight:600;font-size:13px;">⏱ ${timerHtml}</span>` : ''}
+          ${timerHtml ? `<span style="margin-left:8px;color:var(--accent-blue);font-weight:600;font-size:13px;">⏱ ${timerHtml}</span>` : ''}
         </div>
-        ${tempoHtml ? `<div class="card-row" style="font-size:12px;color:#6b7280;">Tempo: ${tempoHtml}</div>` : ''}
-        ${n.imbarcazione ? `<div class="card-row" style="font-size:12px;color:#6b7280;">Imbarc.: ${esc(n.imbarcazione)}</div>` : ''}
-        <div class="card-cost" style="color:${n.pagato ? '#16a34a' : '#dc2626'};">${costoDisplay(costo, n.tipologia)}</div>
+        ${tempoHtml ? `<div class="card-row" style="font-size:12px;color:var(--text-muted);">Tempo: ${tempoHtml}</div>` : ''}
+        ${n.imbarcazione ? `<div class="card-row" style="font-size:12px;color:var(--text-muted);">Imbarc.: ${esc(n.imbarcazione)}</div>` : ''}
+        <div class="card-cost" style="color:${n.pagato ? 'var(--accent-green)' : 'var(--accent-red)'};">${costoDisplay(costo, n.tipologia)}</div>
         <div class="card-actions">
           <button class="btn-edit" onclick="togglePagato('${n.id}',${n.pagato})">${n.pagato ? '✅ Pagato' : '⬜ Pagato'}</button>
           <button class="btn-timer" onclick="toggleAttrezzatura('${n.id}',${n.attrezzatura})">${n.attrezzatura ? '✅ Atrezz.' : '⬜ Atrezz.'}</button>
@@ -716,22 +711,22 @@ function apriModalNuovoNoleggio() {
     <div class="modal-content fade-in">
       <h3 style="font-size:18px;font-weight:700;margin-bottom:16px;">➕ Nuovo Noleggio</h3>
       <div style="display:grid;gap:12px;">
-        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Nome e Cognome</label><input type="text" id="modal-nome-cognome" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;" placeholder="Nome Cognome"></div>
-        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Tipo Imbarcazione</label><select id="modal-tipo" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;">${options}</select></div>
-        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Tessera</label><select id="modal-tessera" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;">
+        <div><label style="font-size:12px;font-weight:600;color:var(--text-muted);">Nome e Cognome</label><input type="text" id="modal-nome-cognome" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;box-sizing:border-box;" placeholder="Nome Cognome"></div>
+        <div><label style="font-size:12px;font-weight:600;color:var(--text-muted);">Tipo Imbarcazione</label><select id="modal-tipo" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;">${options}</select></div>
+        <div><label style="font-size:12px;font-weight:600;color:var(--text-muted);">Tessera</label><select id="modal-tessera" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;">
           <option value="TESSERATO">Tesserato</option>
           <option value="UNIVERSITARIO">Universitario</option>
           <option value="NON TESSERATO">Non Tesserato</option>
         </select></div>
-        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Tipologia</label><select id="modal-tipologia" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;">
+        <div><label style="font-size:12px;font-weight:600;color:var(--text-muted);">Tipologia</label><select id="modal-tipologia" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;">
           <option value="NOLEGGIO">Noleggio</option>
           <option value="ABBONATO">Abbonato</option>
           <option value="PRIVATO">Privato</option>
         </select></div>
-        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Quantità</label><input type="number" id="modal-quantita" value="1" min="1" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
-        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Ora Uscita</label><input type="time" id="modal-ora-uscita" value="${timeNow}" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
-        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Staff</label><input type="text" id="modal-staff" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;" placeholder="Staff"></div>
-        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Imbarcazione</label><input type="text" id="modal-imbarcazione" autocomplete="off" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;" placeholder="Nr imbarcazione"></div>
+        <div><label style="font-size:12px;font-weight:600;color:var(--text-muted);">Quantità</label><input type="number" id="modal-quantita" value="1" min="1" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
+        <div><label style="font-size:12px;font-weight:600;color:var(--text-muted);">Ora Uscita</label><input type="time" id="modal-ora-uscita" value="${timeNow}" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
+        <div><label style="font-size:12px;font-weight:600;color:var(--text-muted);">Staff</label><input type="text" id="modal-staff" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;box-sizing:border-box;" placeholder="Staff"></div>
+        <div><label style="font-size:12px;font-weight:600;color:var(--text-muted);">Imbarcazione</label><input type="text" id="modal-imbarcazione" autocomplete="off" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;box-sizing:border-box;" placeholder="Nr imbarcazione"></div>
       </div>
       <div style="display:flex;gap:8px;margin-top:16px;">
         <button class="btn btn-success" style="flex:1;" onclick="aggiungiNoleggioModal()">➕ Aggiungi</button>
@@ -828,24 +823,24 @@ async function apriModificaNoleggio(id) {
     <div class="modal-content fade-in">
       <h3 style="font-size:18px;font-weight:700;margin-bottom:16px;">✏️ Modifica Noleggio</h3>
       <div style="display:grid;gap:12px;">
-        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Nome</label><input type="text" id="modal-nome" value="${esc(n.nome_cognome)}" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
-        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Tipo</label><select id="modal-tipo" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;">${options}</select></div>
-        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Tessera</label><select id="modal-tessera" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;">
+        <div><label style="font-size:12px;font-weight:600;color:var(--text-muted);">Nome</label><input type="text" id="modal-nome" value="${esc(n.nome_cognome)}" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
+        <div><label style="font-size:12px;font-weight:600;color:var(--text-muted);">Tipo</label><select id="modal-tipo" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;">${options}</select></div>
+        <div><label style="font-size:12px;font-weight:600;color:var(--text-muted);">Tessera</label><select id="modal-tessera" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;">
           <option value="TESSERATO" ${n.tessera === 'TESSERATO' ? 'selected' : ''}>Tesserato</option>
           <option value="UNIVERSITARIO" ${n.tessera === 'UNIVERSITARIO' ? 'selected' : ''}>Universitario</option>
           <option value="NON TESSERATO" ${n.tessera === 'NON TESSERATO' ? 'selected' : ''}>Non Tesserato</option>
         </select></div>
-        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Tipologia</label><select id="modal-tipologia" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;">
+        <div><label style="font-size:12px;font-weight:600;color:var(--text-muted);">Tipologia</label><select id="modal-tipologia" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;">
           <option value="NOLEGGIO" ${n.tipologia === 'NOLEGGIO' ? 'selected' : ''}>Noleggio</option>
           <option value="ABBONATO" ${n.tipologia === 'ABBONATO' ? 'selected' : ''}>Abbonato</option>
           <option value="PRIVATO" ${n.tipologia === 'PRIVATO' ? 'selected' : ''}>Privato</option>
         </select></div>
-        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Quantità</label><input type="number" id="modal-quantita" value="${n.quantita || 1}" min="1" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
-        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Ora Uscita</label><input type="time" id="modal-ora-uscita" value="${esc(n.ora_uscita || '')}" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
-        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Ora Rientro</label><input type="time" id="modal-ora-rientro" value="${esc(n.ora_rientro || '')}" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
-        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Staff</label><input type="text" id="modal-staff" value="${esc(n.staff || '')}" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
-        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Imbarcazione</label><input type="text" id="modal-imbarcazione" value="${esc(n.imbarcazione || '')}" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
-        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Note</label><textarea id="modal-note" rows="2" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;">${esc(n.note || '')}</textarea></div>
+        <div><label style="font-size:12px;font-weight:600;color:var(--text-muted);">Quantità</label><input type="number" id="modal-quantita" value="${n.quantita || 1}" min="1" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
+        <div><label style="font-size:12px;font-weight:600;color:var(--text-muted);">Ora Uscita</label><input type="time" id="modal-ora-uscita" value="${esc(n.ora_uscita || '')}" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
+        <div><label style="font-size:12px;font-weight:600;color:var(--text-muted);">Ora Rientro</label><input type="time" id="modal-ora-rientro" value="${esc(n.ora_rientro || '')}" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
+        <div><label style="font-size:12px;font-weight:600;color:var(--text-muted);">Staff</label><input type="text" id="modal-staff" value="${esc(n.staff || '')}" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
+        <div><label style="font-size:12px;font-weight:600;color:var(--text-muted);">Imbarcazione</label><input type="text" id="modal-imbarcazione" value="${esc(n.imbarcazione || '')}" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
+        <div><label style="font-size:12px;font-weight:600;color:var(--text-muted);">Note</label><textarea id="modal-note" rows="2" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;box-sizing:border-box;">${esc(n.note || '')}</textarea></div>
       </div>
       <div style="display:flex;gap:8px;margin-top:16px;">
         <button class="btn btn-primary" style="flex:1;" onclick="salvaModificaNoleggio()">💾 Salva</button>
@@ -898,22 +893,22 @@ async function renderPersone() {
     listHtml += `
       <div style="background:white;border-radius:12px;padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,0.08);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
         <div style="flex:1;min-width:200px;">
-          <div style="font-size:15px;font-weight:700;">${esc(c.nome)} ${esc(c.cognome)} <span style="font-size:12px;color:#6b7280;font-weight:400;">(${nCount} noleggi)</span></div>
+          <div style="font-size:15px;font-weight:700;">${esc(c.nome)} ${esc(c.cognome)} <span style="font-size:12px;color:var(--text-muted);font-weight:400;">(${nCount} noleggi)</span></div>
           <div style="display:flex;gap:6px;margin-top:4px;flex-wrap:wrap;">
-            ${c.tessera ? `<span style="padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600;background:#dbeafe;color:#1e40af;">${esc(c.tessera)}</span>` : ''}
-            ${c.telefono ? `<span style="font-size:12px;color:#6b7280;">📞 ${esc(c.telefono)}</span>` : ''}
-            ${c.email ? `<span style="font-size:12px;color:#6b7280;">✉️ ${esc(c.email)}</span>` : ''}
+            ${c.tessera ? `<span style="padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600;background:var(--accent-blue-light);color:var(--accent-blue-dark);">${esc(c.tessera)}</span>` : ''}
+            ${c.telefono ? `<span style="font-size:12px;color:var(--text-muted);">📞 ${esc(c.telefono)}</span>` : ''}
+            ${c.email ? `<span style="font-size:12px;color:var(--text-muted);">✉️ ${esc(c.email)}</span>` : ''}
           </div>
         </div>
         <div style="display:flex;gap:6px;">
           <button class="btn btn-ghost" onclick="mostraClienteNoleggi('${esc(c.nome)} ${esc(c.cognome)}')" title="Noleggi">📋</button>
           <button class="btn btn-ghost" onclick="apriModificaCliente('${c.id}')" title="Modifica">✏️</button>
-          <button class="btn btn-ghost" onclick="eliminaCliente('${c.id}')" title="Elimina" style="color:#dc2626;">🗑️</button>
+          <button class="btn btn-ghost" onclick="eliminaCliente('${c.id}')" title="Elimina" style="color:var(--accent-red);">🗑️</button>
         </div>
       </div>`;
   });
   if (clienti.length === 0) {
-    listHtml = '<div style="text-align:center;padding:40px;color:#9ca3af;">Nessuna persona registrata</div>';
+    listHtml = '<div style="text-align:center;padding:40px;color:var(--text-faint);">Nessuna persona registrata</div>';
   }
   return `
     <div class="fade-in">
@@ -922,7 +917,7 @@ async function renderPersone() {
         <button class="btn btn-success" onclick="apriModificaCliente(null)">+ Nuova Persona</button>
       </div>
       <div style="margin-bottom:16px;">
-        <input type="text" id="search-persone" placeholder="🔍 Cerca persona..." oninput="cercaPersone()" style="width:100%;padding:10px 14px;border:2px solid #e5e7eb;border-radius:10px;font-size:14px;box-sizing:border-box;">
+        <input type="text" id="search-persone" placeholder="🔍 Cerca persona..." oninput="cercaPersone()" style="width:100%;padding:10px 14px;border:2px solid var(--border-light);border-radius:10px;font-size:14px;box-sizing:border-box;">
       </div>
       <div id="lista-persone">${listHtml}</div>
     </div>`;
@@ -951,21 +946,21 @@ async function cercaPersone() {
     listHtml += `
       <div style="background:white;border-radius:12px;padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,0.08);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
         <div style="flex:1;min-width:200px;">
-          <div style="font-size:15px;font-weight:700;">${esc(c.nome)} ${esc(c.cognome)} <span style="font-size:12px;color:#6b7280;font-weight:400;">(${nCount} noleggi)</span></div>
+          <div style="font-size:15px;font-weight:700;">${esc(c.nome)} ${esc(c.cognome)} <span style="font-size:12px;color:var(--text-muted);font-weight:400;">(${nCount} noleggi)</span></div>
           <div style="display:flex;gap:6px;margin-top:4px;flex-wrap:wrap;">
-            ${c.tessera ? `<span style="padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600;background:#dbeafe;color:#1e40af;">${esc(c.tessera)}</span>` : ''}
-            ${c.telefono ? `<span style="font-size:12px;color:#6b7280;">📞 ${esc(c.telefono)}</span>` : ''}
-            ${c.email ? `<span style="font-size:12px;color:#6b7280;">✉️ ${esc(c.email)}</span>` : ''}
+            ${c.tessera ? `<span style="padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600;background:var(--accent-blue-light);color:var(--accent-blue-dark);">${esc(c.tessera)}</span>` : ''}
+            ${c.telefono ? `<span style="font-size:12px;color:var(--text-muted);">📞 ${esc(c.telefono)}</span>` : ''}
+            ${c.email ? `<span style="font-size:12px;color:var(--text-muted);">✉️ ${esc(c.email)}</span>` : ''}
           </div>
         </div>
         <div style="display:flex;gap:6px;">
           <button class="btn btn-ghost" onclick="mostraClienteNoleggi('${esc(c.nome)} ${esc(c.cognome)}')" title="Noleggi">📋</button>
           <button class="btn btn-ghost" onclick="apriModificaCliente('${c.id}')" title="Modifica">✏️</button>
-          <button class="btn btn-ghost" onclick="eliminaCliente('${c.id}')" title="Elimina" style="color:#dc2626;">🗑️</button>
+          <button class="btn btn-ghost" onclick="eliminaCliente('${c.id}')" title="Elimina" style="color:var(--accent-red);">🗑️</button>
         </div>
       </div>`;
   });
-  container.innerHTML = listHtml || '<div style="text-align:center;padding:40px;color:#9ca3af;">Nessun risultato</div>';
+  container.innerHTML = listHtml || '<div style="text-align:center;padding:40px;color:var(--text-faint);">Nessun risultato</div>';
 }
 
 async function apriModificaCliente(id) {
@@ -983,16 +978,16 @@ async function apriModificaCliente(id) {
     <div class="modal-content fade-in">
       <h3 style="font-size:18px;font-weight:700;margin-bottom:16px;">${id ? '✏️ Modifica Persona' : '➕ Nuova Persona'}</h3>
       <div style="display:grid;gap:12px;">
-        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Nome</label><input type="text" id="modal-c-nome" value="${esc(c.nome)}" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
-        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Cognome</label><input type="text" id="modal-c-cognome" value="${esc(c.cognome)}" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
-        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Telefono</label><input type="text" id="modal-c-telefono" value="${esc(c.telefono || '')}" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
-        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Email</label><input type="email" id="modal-c-email" value="${esc(c.email || '')}" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
-        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Tessera</label><select id="modal-c-tessera" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;">
+        <div><label style="font-size:12px;font-weight:600;color:var(--text-muted);">Nome</label><input type="text" id="modal-c-nome" value="${esc(c.nome)}" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
+        <div><label style="font-size:12px;font-weight:600;color:var(--text-muted);">Cognome</label><input type="text" id="modal-c-cognome" value="${esc(c.cognome)}" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
+        <div><label style="font-size:12px;font-weight:600;color:var(--text-muted);">Telefono</label><input type="text" id="modal-c-telefono" value="${esc(c.telefono || '')}" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
+        <div><label style="font-size:12px;font-weight:600;color:var(--text-muted);">Email</label><input type="email" id="modal-c-email" value="${esc(c.email || '')}" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;box-sizing:border-box;"></div>
+        <div><label style="font-size:12px;font-weight:600;color:var(--text-muted);">Tessera</label><select id="modal-c-tessera" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;">
           <option value="TESSERATO" ${c.tessera === 'TESSERATO' ? 'selected' : ''}>Tesserato</option>
           <option value="UNIVERSITARIO" ${c.tessera === 'UNIVERSITARIO' ? 'selected' : ''}>Universitario</option>
           <option value="NON TESSERATO" ${c.tessera === 'NON TESSERATO' ? 'selected' : ''}>Non Tesserato</option>
         </select></div>
-        <div><label style="font-size:12px;font-weight:600;color:#6b7280;">Note</label><textarea id="modal-c-note" rows="2" style="width:100%;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;box-sizing:border-box;">${esc(c.note || '')}</textarea></div>
+        <div><label style="font-size:12px;font-weight:600;color:var(--text-muted);">Note</label><textarea id="modal-c-note" rows="2" style="width:100%;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;box-sizing:border-box;">${esc(c.note || '')}</textarea></div>
       </div>
       <div style="display:flex;gap:8px;margin-top:16px;">
         <button class="btn btn-primary" style="flex:1;" onclick="salvaCliente()">💾 Salva</button>
@@ -1038,7 +1033,7 @@ async function mostraClienteNoleggi(nomeCognome) {
   noleggi.forEach(n => {
     const costo = calcolaCosto(n);
     rows += `
-      <tr style="border-bottom:1px solid #f3f4f6;">
+      <tr style="border-bottom:1px solid var(--border-light);">
         <td style="padding:8px;font-size:13px;">${formatDateIt(n.data_giornata)}</td>
         <td style="padding:8px;font-size:13px;">${esc(n.tipo_imbarcazione)}</td>
         <td style="padding:8px;font-size:13px;">${esc(n.ora_uscita || '-')} → ${esc(n.ora_rientro || '-')}</td>
@@ -1049,16 +1044,16 @@ async function mostraClienteNoleggi(nomeCognome) {
   overlay.innerHTML = `
     <div class="modal-content fade-in" style="max-width:700px;">
       <h3 style="font-size:18px;font-weight:700;margin-bottom:16px;">📋 Noleggi di ${esc(nomeCognome)}</h3>
-      ${noleggi.length === 0 ? '<div style="text-align:center;padding:20px;color:#9ca3af;">Nessun noleggio trovato</div>' : `
+      ${noleggi.length === 0 ? '<div style="text-align:center;padding:20px;color:var(--text-faint);">Nessun noleggio trovato</div>' : `
         <div style="overflow-x:auto;">
           <table style="width:100%;border-collapse:collapse;font-size:13px;">
             <thead>
-              <tr style="border-bottom:2px solid #e5e7eb;">
-                <th style="padding:8px;text-align:left;color:#6b7280;">Data</th>
-                <th style="padding:8px;text-align:left;color:#6b7280;">Tipo</th>
-                <th style="padding:8px;text-align:left;color:#6b7280;">Orario</th>
-                <th style="padding:8px;text-align:left;color:#6b7280;">Costo</th>
-                <th style="padding:8px;text-align:center;color:#6b7280;">Pagato</th>
+              <tr style="border-bottom:2px solid var(--border-light);">
+                <th style="padding:8px;text-align:left;color:var(--text-muted);">Data</th>
+                <th style="padding:8px;text-align:left;color:var(--text-muted);">Tipo</th>
+                <th style="padding:8px;text-align:left;color:var(--text-muted);">Orario</th>
+                <th style="padding:8px;text-align:left;color:var(--text-muted);">Costo</th>
+                <th style="padding:8px;text-align:center;color:var(--text-muted);">Pagato</th>
               </tr>
             </thead>
             <tbody>${rows}</tbody>
@@ -1096,19 +1091,19 @@ async function renderStorico() {
       <div style="background:white;border-radius:12px;padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,0.08);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;cursor:pointer;" onclick="currentData='${esc(g.data)}';showView('giorno');">
         <div>
           <div style="font-size:16px;font-weight:700;">📅 ${formatDateIt(g.data)}</div>
-          <div style="font-size:13px;color:#6b7280;margin-top:2px;">${gs.count} noleggi</div>
+          <div style="font-size:13px;color:var(--text-muted);margin-top:2px;">${gs.count} noleggi</div>
         </div>
         <div style="display:flex;align-items:center;gap:12px;">
           <div style="text-align:right;">
-            <div style="font-size:15px;font-weight:700;color:#16a34a;">€${gs.totale.toFixed(2)}</div>
-            ${dovuto > 0 ? `<div style="font-size:12px;color:#dc2626;">Dovuto: €${dovuto.toFixed(2)}</div>` : ''}
+            <div style="font-size:15px;font-weight:700;color:var(--accent-green);">€${gs.totale.toFixed(2)}</div>
+            ${dovuto > 0 ? `<div style="font-size:12px;color:var(--accent-red);">Dovuto: €${dovuto.toFixed(2)}</div>` : ''}
           </div>
-          <button class="btn btn-ghost" onclick="event.stopPropagation();eliminaGiornata('${g.id}')" style="color:#dc2626;font-size:16px;">🗑️</button>
+          <button class="btn btn-ghost" onclick="event.stopPropagation();eliminaGiornata('${g.id}')" style="color:var(--accent-red);font-size:16px;">🗑️</button>
         </div>
       </div>`;
   }
   if (giornate.length === 0) {
-    listHtml = '<div style="text-align:center;padding:40px;color:#9ca3af;">Nessuna giornata nello storico</div>';
+    listHtml = '<div style="text-align:center;padding:40px;color:var(--text-faint);">Nessuna giornata nello storico</div>';
   }
   return `
     <div class="fade-in">
@@ -1116,19 +1111,19 @@ async function renderStorico() {
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px;">
         <div style="background:white;border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.08);text-align:center;">
           <div style="font-size:28px;font-weight:800;color:#2563eb;">${giornate.length}</div>
-          <div style="font-size:12px;color:#6b7280;font-weight:600;">Giornate</div>
+          <div style="font-size:12px;color:var(--text-muted);font-weight:600;">Giornate</div>
         </div>
         <div style="background:white;border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.08);text-align:center;">
           <div style="font-size:28px;font-weight:800;color:#7c3aed;">${totaleNoleggi}</div>
-          <div style="font-size:12px;color:#6b7280;font-weight:600;">Noleggi Totali</div>
+          <div style="font-size:12px;color:var(--text-muted);font-weight:600;">Noleggi Totali</div>
         </div>
         <div style="background:white;border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.08);text-align:center;">
-          <div style="font-size:28px;font-weight:800;color:#16a34a;">€${incassato.toFixed(2)}</div>
-          <div style="font-size:12px;color:#6b7280;font-weight:600;">Incassato</div>
+          <div style="font-size:28px;font-weight:800;color:var(--accent-green);">€${incassato.toFixed(2)}</div>
+          <div style="font-size:12px;color:var(--text-muted);font-weight:600;">Incassato</div>
         </div>
         <div style="background:white;border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.08);text-align:center;">
-          <div style="font-size:28px;font-weight:800;color:#dc2626;">€${(incassoTotale - incassato).toFixed(2)}</div>
-          <div style="font-size:12px;color:#6b7280;font-weight:600;">Dovuto</div>
+          <div style="font-size:28px;font-weight:800;color:var(--accent-red);">€${(incassoTotale - incassato).toFixed(2)}</div>
+          <div style="font-size:12px;color:var(--text-muted);font-weight:600;">Dovuto</div>
         </div>
       </div>
       <div id="lista-storico">${listHtml}</div>
@@ -1139,10 +1134,10 @@ function renderPrezzi() {
   let rows = '';
   prezzi.forEach(p => {
     rows += `
-      <tr style="border-bottom:1px solid #f3f4f6;">
+      <tr style="border-bottom:1px solid var(--border-light);">
         <td style="padding:10px;font-size:14px;font-weight:600;">${esc(p.tipo_imbarcazione)}</td>
-        <td style="padding:10px;"><input type="number" step="0.50" min="0" id="prezzo-studenti-${p.id}" value="${p.prezzo_studenti || 0}" style="width:80px;padding:6px 10px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;text-align:right;"></td>
-        <td style="padding:10px;"><input type="number" step="0.50" min="0" id="prezzo-esterni-${p.id}" value="${p.prezzo_esterni || 0}" style="width:80px;padding:6px 10px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;text-align:right;"></td>
+        <td style="padding:10px;"><input type="number" step="0.50" min="0" id="prezzo-studenti-${p.id}" value="${p.prezzo_studenti || 0}" style="width:80px;padding:6px 10px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;text-align:right;"></td>
+        <td style="padding:10px;"><input type="number" step="0.50" min="0" id="prezzo-esterni-${p.id}" value="${p.prezzo_esterni || 0}" style="width:80px;padding:6px 10px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;text-align:right;"></td>
         <td style="padding:10px;"><button class="btn btn-primary" onclick="salvaPrezzo('${p.id}')">💾</button></td>
       </tr>`;
   });
@@ -1152,11 +1147,11 @@ function renderPrezzi() {
       <div style="background:white;border-radius:16px;box-shadow:0 1px 3px rgba(0,0,0,0.08);overflow-x:auto;">
         <table style="width:100%;border-collapse:collapse;font-size:14px;">
           <thead>
-            <tr style="border-bottom:2px solid #e5e7eb;">
-              <th style="padding:12px;text-align:left;color:#6b7280;">Tipo Imbarcazione</th>
-              <th style="padding:12px;text-align:left;color:#6b7280;">Studenti (€/h)</th>
-              <th style="padding:12px;text-align:left;color:#6b7280;">Tesserati/Esterni (€/h)</th>
-              <th style="padding:12px;text-align:left;color:#6b7280;">Azione</th>
+            <tr style="border-bottom:2px solid var(--border-light);">
+              <th style="padding:12px;text-align:left;color:var(--text-muted);">Tipo Imbarcazione</th>
+              <th style="padding:12px;text-align:left;color:var(--text-muted);">Studenti (€/h)</th>
+              <th style="padding:12px;text-align:left;color:var(--text-muted);">Tesserati/Esterni (€/h)</th>
+              <th style="padding:12px;text-align:left;color:var(--text-muted);">Azione</th>
             </tr>
           </thead>
           <tbody>${rows}</tbody>
@@ -1180,12 +1175,12 @@ async function renderImpostazioni() {
     let userListHtml = '';
     users.forEach(u => {
       userListHtml += `
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px;border-bottom:1px solid #f3f4f6;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px;border-bottom:1px solid var(--border-light);">
           <div>
             <span style="font-weight:600;">${esc(u.username)}</span>
-            <span style="padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600;background:${u.role === 'admin' ? '#fef3c7;color:#92400e' : '#dbeafe;color:#1e40af'};margin-left:8px;">${esc(u.role)}</span>
+            <span style="padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600;background:${u.role === 'admin' ? '#fef3c7;color:#92400e' : '#dbeafe;color:var(--accent-blue-dark)'};margin-left:8px;">${esc(u.role)}</span>
           </div>
-          ${u.username !== currentUser.username ? `<button class="btn btn-ghost" onclick="eliminaUtente('${u.id}')" style="color:#dc2626;font-size:14px;">🗑️</button>` : ''}
+          ${u.username !== currentUser.username ? `<button class="btn btn-ghost" onclick="eliminaUtente('${u.id}')" style="color:var(--accent-red);font-size:14px;">🗑️</button>` : ''}
         </div>`;
     });
     let dbStatsHtml = '';
@@ -1205,9 +1200,9 @@ async function renderImpostazioni() {
       const last10 = allNoleggi.sort((a, b) => (b.created_at || '').localeCompare(a.created_at || '')).slice(0, 10);
       let last10Html = '';
       last10.forEach(n => {
-        last10Html += `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f3f4f6;font-size:13px;">
+        last10Html += `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border-light);font-size:13px;">
           <span>${esc(n.nome_cognome)}</span>
-          <span style="color:#6b7280;">${esc(n.tipo_imbarcazione)}</span>
+          <span style="color:var(--text-muted);">${esc(n.tipo_imbarcazione)}</span>
           <span style="font-weight:600;color:${n.pagato ? '#16a34a' : '#dc2626'};">€${(parseFloat(n.costo) || 0).toFixed(2)}</span>
         </div>`;
       });
@@ -1215,53 +1210,53 @@ async function renderImpostazioni() {
         <div style="background:white;border-radius:16px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.08);margin-top:20px;">
           <h3 style="font-size:16px;font-weight:700;margin-bottom:12px;">🗄️ Stato Database</h3>
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:16px;">
-            <div style="text-align:center;padding:12px;background:#f0f9ff;border-radius:10px;">
+            <div style="text-align:center;padding:12px;background:var(--db-blue);border-radius:10px;">
               <div style="font-size:24px;font-weight:800;color:#2563eb;">${allGiornate.length}</div>
-              <div style="font-size:11px;color:#6b7280;font-weight:600;">Giornate</div>
+              <div style="font-size:11px;color:var(--text-muted);font-weight:600;">Giornate</div>
             </div>
-            <div style="text-align:center;padding:12px;background:#f5f3ff;border-radius:10px;">
+            <div style="text-align:center;padding:12px;background:var(--db-purple);border-radius:10px;">
               <div style="font-size:24px;font-weight:800;color:#7c3aed;">${totaleNoleggi}</div>
-              <div style="font-size:11px;color:#6b7280;font-weight:600;">Noleggi</div>
+              <div style="font-size:11px;color:var(--text-muted);font-weight:600;">Noleggi</div>
             </div>
-            <div style="text-align:center;padding:12px;background:#f0fdf4;border-radius:10px;">
-              <div style="font-size:24px;font-weight:800;color:#16a34a;">${allClienti.length}</div>
-              <div style="font-size:11px;color:#6b7280;font-weight:600;">Clienti</div>
+            <div style="text-align:center;padding:12px;background:var(--db-green);border-radius:10px;">
+              <div style="font-size:24px;font-weight:800;color:var(--accent-green);">${allClienti.length}</div>
+              <div style="font-size:11px;color:var(--text-muted);font-weight:600;">Clienti</div>
             </div>
-            <div style="text-align:center;padding:12px;background:#fffbeb;border-radius:10px;">
+            <div style="text-align:center;padding:12px;background:var(--db-yellow);border-radius:10px;">
               <div style="font-size:24px;font-weight:800;color:#d97706;">${allPrezzi.length}</div>
-              <div style="font-size:11px;color:#6b7280;font-weight:600;">Prezzi</div>
+              <div style="font-size:11px;color:var(--text-muted);font-weight:600;">Prezzi</div>
             </div>
           </div>
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:16px;">
-            <div style="text-align:center;padding:12px;background:#f0fdf4;border-radius:10px;">
-              <div style="font-size:20px;font-weight:800;color:#16a34a;">€${incassoTotale.toFixed(2)}</div>
-              <div style="font-size:11px;color:#6b7280;font-weight:600;">Incasso Totale</div>
+            <div style="text-align:center;padding:12px;background:var(--db-green);border-radius:10px;">
+              <div style="font-size:20px;font-weight:800;color:var(--accent-green);">€${incassoTotale.toFixed(2)}</div>
+              <div style="font-size:11px;color:var(--text-muted);font-weight:600;">Incasso Totale</div>
             </div>
-            <div style="text-align:center;padding:12px;background:#f0fdf4;border-radius:10px;">
-              <div style="font-size:20px;font-weight:800;color:#16a34a;">€${incassato.toFixed(2)}</div>
-              <div style="font-size:11px;color:#6b7280;font-weight:600;">Incassato</div>
+            <div style="text-align:center;padding:12px;background:var(--db-green);border-radius:10px;">
+              <div style="font-size:20px;font-weight:800;color:var(--accent-green);">€${incassato.toFixed(2)}</div>
+              <div style="font-size:11px;color:var(--text-muted);font-weight:600;">Incassato</div>
             </div>
-            <div style="text-align:center;padding:12px;background:#fef2f2;border-radius:10px;">
-              <div style="font-size:20px;font-weight:800;color:#dc2626;">€${(incassoTotale - incassato).toFixed(2)}</div>
-              <div style="font-size:11px;color:#6b7280;font-weight:600;">Dovuto</div>
+            <div style="text-align:center;padding:12px;background:var(--db-red);border-radius:10px;">
+              <div style="font-size:20px;font-weight:800;color:var(--accent-red);">€${(incassoTotale - incassato).toFixed(2)}</div>
+              <div style="font-size:11px;color:var(--text-muted);font-weight:600;">Dovuto</div>
             </div>
           </div>
           <h4 style="font-size:14px;font-weight:700;margin-bottom:8px;">Ultimi 10 Noleggi</h4>
-          ${last10Html || '<div style="color:#9ca3af;font-size:13px;">Nessun noleggio</div>'}
+          ${last10Html || '<div style="color:var(--text-faint);font-size:13px;">Nessun noleggio</div>'}
           <div style="display:flex;gap:8px;margin-top:16px;">
             <button class="btn btn-primary" onclick="syncFromSupabase();alert('Sincronizzazione completata!')">🔄 Sincronizza DB</button>
             <button class="btn btn-ghost" onclick="esportaDati()">📦 Esporta JSON</button>
           </div>
         </div>`;
     } catch (e) {
-      dbStatsHtml = '<div style="background:#fef2f2;border-radius:12px;padding:16px;color:#dc2626;">Errore nel caricamento stats: ' + esc(e.message) + '</div>';
+      dbStatsHtml = '<div style="background:var(--db-red);border-radius:12px;padding:16px;color:var(--accent-red);">Errore nel caricamento stats: ' + esc(e.message) + '</div>';
     }
     adminHtml = dbStatsHtml + `
       <div style="background:white;border-radius:16px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.08);margin-top:20px;">
         <h3 style="font-size:16px;font-weight:700;margin-bottom:12px;">👤 Gestione Utenti</h3>
         <div style="margin-bottom:16px;display:grid;grid-template-columns:1fr 1fr auto;gap:8px;">
-          <input type="text" id="new-username" placeholder="Username" style="padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;">
-          <input type="password" id="new-password" placeholder="Password" style="padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;">
+          <input type="text" id="new-username" placeholder="Username" style="padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;">
+          <input type="password" id="new-password" placeholder="Password" style="padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;">
           <button class="btn btn-success" onclick="creaUtente()">+ Aggiungi</button>
         </div>
         <div id="lista-utenti">${userListHtml}</div>
@@ -1274,18 +1269,18 @@ async function renderImpostazioni() {
         <h3 style="font-size:16px;font-weight:700;margin-bottom:12px;">🌙 Modalità Scura</h3>
         <div style="display:flex;align-items:center;gap:12px;">
           <div class="toggle ${darkMode ? 'active' : ''}" onclick="toggleDarkMode()"></div>
-          <span style="font-size:14px;color:#6b7280;">${darkMode ? 'Attiva' : 'Disattiva'}</span>
+          <span style="font-size:14px;color:var(--text-muted);">${darkMode ? 'Attiva' : 'Disattiva'}</span>
         </div>
       </div>
       <div style="background:white;border-radius:16px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.08);margin-bottom:16px;">
         <h3 style="font-size:16px;font-weight:700;margin-bottom:12px;">📋 Vista Giornata</h3>
         <div style="display:flex;flex-direction:column;gap:12px;">
           <div style="display:flex;align-items:center;justify-content:space-between;">
-            <span style="font-size:14px;color:#6b7280;">Mostra statistiche (Noleggi, Totale, Incassato, Dovuto)</span>
+            <span style="font-size:14px;color:var(--text-muted);">Mostra statistiche (Noleggi, Totale, Incassato, Dovuto)</span>
             <div class="toggle ${showStats ? 'active' : ''}" onclick="toggleShowStats()"></div>
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;">
-            <span style="font-size:14px;color:#6b7280;">Mostra form inserimento noleggi</span>
+            <span style="font-size:14px;color:var(--text-muted);">Mostra form inserimento noleggi</span>
             <div class="toggle ${showFormNoleggio ? 'active' : ''}" onclick="toggleShowFormNoleggio()"></div>
           </div>
         </div>
@@ -1293,8 +1288,8 @@ async function renderImpostazioni() {
       <div style="background:white;border-radius:16px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.08);margin-bottom:16px;">
         <h3 style="font-size:16px;font-weight:700;margin-bottom:12px;">🔄 Aggiornamento Automatico</h3>
         <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-          <label style="font-size:14px;color:#6b7280;">Intervallo (sec):</label>
-          <input type="number" id="auto-refresh-interval" value="${autoRefreshSeconds}" min="5" max="300" style="width:80px;padding:8px 12px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;text-align:center;">
+          <label style="font-size:14px;color:var(--text-muted);">Intervallo (sec):</label>
+          <input type="number" id="auto-refresh-interval" value="${autoRefreshSeconds}" min="5" max="300" style="width:80px;padding:8px 12px;border:2px solid var(--border-light);border-radius:8px;font-size:14px;text-align:center;">
           <button class="btn btn-primary" onclick="salvaAutoRefresh()">Applica</button>
           <span style="font-size:13px;color:${autoRefreshTimer ? '#16a34a' : '#dc2626'};">${autoRefreshTimer ? '✅ Attivo' : '⛔ Disattivo'}</span>
         </div>
@@ -1305,7 +1300,7 @@ async function renderImpostazioni() {
       </div>
       <div style="background:white;border-radius:16px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.08);margin-bottom:16px;">
         <h3 style="font-size:16px;font-weight:700;margin-bottom:12px;">ℹ️ Info</h3>
-        <div style="font-size:14px;color:#6b7280;line-height:1.8;">
+        <div style="font-size:14px;color:var(--text-muted);line-height:1.8;">
           <div>Versione: 1.0.0</div>
           <div>Utente: ${esc(currentUser?.username || '-')} (${esc(currentUser?.role || '-')})</div>
           <div>Modalità: ${navigator.onLine ? '🟢 Online' : '🔴 Offline'}</div>
