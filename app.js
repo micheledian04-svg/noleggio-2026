@@ -9,6 +9,7 @@ let showStats = localStorage.getItem('showStats') !== 'false';
 let showFormNoleggio = localStorage.getItem('showFormNoleggio') !== 'false';
 let autoRefreshSeconds = parseInt(localStorage.getItem('autoRefreshSeconds') || '10');
 let autoRefreshTimer = null;
+let autoSyncTimer = null;
 let editingNoleggioId = null;
 let editingClienteId = null;
 let autocompleteTimer = null;
@@ -157,6 +158,13 @@ function toggleAutoRefresh() {
   }
 }
 
+function startAutoSync() {
+  if (autoSyncTimer) clearInterval(autoSyncTimer);
+  autoSyncTimer = setInterval(async () => {
+    if (isOnline) await syncFromSupabase();
+  }, 5 * 60 * 1000);
+}
+
 function stopTimers() {
   document.querySelectorAll('.live-timer').forEach(el => {
     if (el._timerInterval) clearInterval(el._timerInterval);
@@ -264,6 +272,7 @@ function logout() {
   currentUser = null;
   stopTimers();
   if (autoRefreshTimer) { clearInterval(autoRefreshTimer); autoRefreshTimer = null; }
+  if (autoSyncTimer) { clearInterval(autoSyncTimer); autoSyncTimer = null; }
   showLogin();
 }
 
@@ -284,6 +293,7 @@ async function init() {
   applyDarkMode();
   applyColors();
   toggleAutoRefresh();
+  startAutoSync();
   render();
 }
 
