@@ -5,6 +5,8 @@ let noleggiCorrenti = [];
 let giornataCorrente = null;
 let currentUser = null;
 let darkMode = localStorage.getItem('darkMode') === 'true';
+let showStats = localStorage.getItem('showStats') !== 'false';
+let showFormNoleggio = localStorage.getItem('showFormNoleggio') !== 'false';
 let autoRefreshSeconds = parseInt(localStorage.getItem('autoRefreshSeconds') || '30');
 let autoRefreshTimer = null;
 let editingNoleggioId = null;
@@ -109,6 +111,18 @@ function toggleDarkMode() {
   darkMode = !darkMode;
   localStorage.setItem('darkMode', darkMode);
   applyDarkMode();
+  render();
+}
+
+function toggleShowStats() {
+  showStats = !showStats;
+  localStorage.setItem('showStats', showStats);
+  render();
+}
+
+function toggleShowFormNoleggio() {
+  showFormNoleggio = !showFormNoleggio;
+  localStorage.setItem('showFormNoleggio', showFormNoleggio);
   render();
 }
 
@@ -410,6 +424,7 @@ function renderGiorno() {
       </div>
       <div style="font-size:22px;font-weight:700;margin-bottom:16px;color:#1e40af;">📅 ${formatDateIt(currentData)}</div>
       ${giornataCorrente ? `
+        ${showStats ? `
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px;">
           <div style="background:white;border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.08);text-align:center;">
             <div style="font-size:28px;font-weight:800;color:#2563eb;">${stats.noleggi}</div>
@@ -427,7 +442,8 @@ function renderGiorno() {
             <div style="font-size:28px;font-weight:800;color:#dc2626;">€${stats.dovuto.toFixed(2)}</div>
             <div style="font-size:12px;color:#6b7280;font-weight:600;">Dovuto</div>
           </div>
-        </div>
+        </div>` : ''}
+        ${showFormNoleggio ? `
         <div class="desktop-only" style="background:white;border-radius:16px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.08);margin-bottom:20px;">
           <h3 style="font-size:16px;font-weight:700;margin-bottom:12px;">➕ Nuovo Noleggio</h3>
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;">
@@ -473,7 +489,7 @@ function renderGiorno() {
             </div>
           </div>
           <button class="btn btn-success" style="margin-top:12px;width:100%;" onclick="aggiungiNoleggio()">➕ Aggiungi Noleggio</button>
-        </div>
+        </div>` : ''}
         ${noleggiHtml}
         <button class="mobile-only" onclick="apriModalNuovoNoleggio()" style="position:fixed;bottom:90px;right:16px;width:56px;height:56px;border-radius:50%;background:#16a34a;color:white;font-size:28px;border:none;box-shadow:0 4px 12px rgba(0,0,0,0.25);cursor:pointer;z-index:100;display:flex;align-items:center;justify-content:center;">+</button>
       ` : `
@@ -1192,6 +1208,19 @@ async function renderImpostazioni() {
         <div style="display:flex;align-items:center;gap:12px;">
           <div class="toggle ${darkMode ? 'active' : ''}" onclick="toggleDarkMode()"></div>
           <span style="font-size:14px;color:#6b7280;">${darkMode ? 'Attiva' : 'Disattiva'}</span>
+        </div>
+      </div>
+      <div style="background:white;border-radius:16px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.08);margin-bottom:16px;">
+        <h3 style="font-size:16px;font-weight:700;margin-bottom:12px;">📋 Vista Giornata</h3>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:14px;color:#6b7280;">Mostra statistiche (Noleggi, Totale, Incassato, Dovuto)</span>
+            <div class="toggle ${showStats ? 'active' : ''}" onclick="toggleShowStats()"></div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:14px;color:#6b7280;">Mostra form inserimento noleggi</span>
+            <div class="toggle ${showFormNoleggio ? 'active' : ''}" onclick="toggleShowFormNoleggio()"></div>
+          </div>
         </div>
       </div>
       <div style="background:white;border-radius:16px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.08);margin-bottom:16px;">
