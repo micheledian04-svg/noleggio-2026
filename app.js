@@ -13,6 +13,7 @@ let editingNoleggioId = null;
 let editingClienteId = null;
 let autocompleteTimer = null;
 let expandedCards = new Set();
+let searchNoleggiQuery = '';
 
 function esc(s) {
   if (s === null || s === undefined) return '';
@@ -405,7 +406,10 @@ function renderGiorno() {
   let noleggiHtml = '';
   if (giornataCorrente) {
     if (noleggiCorrenti.length > 0) {
-      noleggiHtml = renderDesktopTable() + renderMobileCards();
+      const filtered = searchNoleggiQuery.trim()
+        ? noleggiCorrenti.filter(n => (n.nome_cognome || '').toLowerCase().includes(searchNoleggiQuery.toLowerCase()))
+        : noleggiCorrenti;
+      noleggiHtml = `<div style="margin-bottom:12px;"><input type="text" id="search-noleggi" placeholder="🔍 Cerca per nome..." value="${esc(searchNoleggiQuery)}" oninput="cercaNoleggi(this.value)" style="width:100%;padding:10px 14px;border:2px solid #e5e7eb;border-radius:10px;font-size:14px;box-sizing:border-box;"></div><div id="lista-noleggi">${renderDesktopTable(filtered) + renderMobileCards(filtered)}</div>`;
     } else {
       noleggiHtml = '<div style="text-align:center;padding:40px;color:#9ca3af;">Nessun noleggio oggi</div>';
     }
@@ -504,9 +508,9 @@ function renderGiorno() {
     </div>`;
 }
 
-function renderDesktopTable() {
+function renderDesktopTable(noleggi = noleggiCorrenti) {
   let rows = '';
-  noleggiCorrenti.forEach((n, i) => {
+  noleggi.forEach((n, i) => {
     const costo = calcolaCosto(n);
     const incoerente = orarioIncoerente(n);
     const rowClass = incoerente ? 'row-warning' : (n.pagato ? 'row-pagato' : '');
@@ -558,9 +562,9 @@ function renderDesktopTable() {
     </div>`;
 }
 
-function renderMobileCards() {
+function renderMobileCards(noleggi = noleggiCorrenti) {
   let cards = '';
-  noleggiCorrenti.forEach((n, i) => {
+  noleggi.forEach((n, i) => {
     const costo = calcolaCosto(n);
     const incoerente = orarioIncoerente(n);
     const cardClass = incoerente ? 'row-warning' : (n.pagato ? 'pagato' : '');
@@ -615,6 +619,18 @@ function toggleCardExpand(id) {
   if (expandedCards.has(id)) expandedCards.delete(id);
   else expandedCards.add(id);
   render();
+}
+
+function cercaNoleggi(q) {
+  searchNoleggiQuery = q;
+  const container = document.getElementById('lista-noleggi');
+  if (container) {
+    const filtered = q.trim()
+      ? noleggiCorrenti.filter(n => (n.nome_cognome || '').toLowerCase().includes(q.toLowerCase()))
+      : noleggiCorrenti;
+    container.innerHTML = renderDesktopTable(filtered) + renderMobileCards(filtered);
+    startTimers();
+  }
 }
 
 async function aggiungiNoleggio() {
