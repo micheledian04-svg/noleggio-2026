@@ -59,6 +59,7 @@ function formatDateIt(d) {
 }
 
 function showView(v) {
+  if (v === 'prezzi' && currentUser?.role !== 'admin') return;
   currentView = v;
   render();
 }
@@ -297,7 +298,7 @@ function renderHeader() {
     { id: 'giorno', label: 'Giornata', icon: '📋' },
     { id: 'persone', label: 'Persone', icon: '👥' },
     { id: 'storico', label: 'Storico', icon: '📊' },
-    { id: 'prezzi', label: 'Prezzi', icon: '💰' },
+    ...(currentUser?.role === 'admin' ? [{ id: 'prezzi', label: 'Prezzi', icon: '💰' }] : []),
     { id: 'impostazioni', label: 'Impostazioni', icon: '⚙️' }
   ];
   const navPills = tabs.map(t =>
@@ -326,7 +327,7 @@ function renderBottomNav() {
     { id: 'giorno', label: 'Giornata', icon: '📋' },
     { id: 'persone', label: 'Persone', icon: '👥' },
     { id: 'storico', label: 'Storico', icon: '📊' },
-    { id: 'prezzi', label: 'Prezzi', icon: '💰' },
+    ...(currentUser?.role === 'admin' ? [{ id: 'prezzi', label: 'Prezzi', icon: '💰' }] : []),
     { id: 'impostazioni', label: 'Impost.', icon: '⚙️' }
   ];
   return `
