@@ -95,6 +95,7 @@ function applyDarkMode() {
       .modal-content { background: #1e293b !important; color: #e2e8f0 !important; }
       input, select, textarea { background: #334155 !important; color: #e2e8f0 !important; border-color: #475569 !important; }
       .noleggio-card { background: #1e293b !important; color: #e2e8f0 !important; }
+      .noleggio-card .card-header .nome { color: #f1f5f9 !important; }
       .noleggio-card.pagato { background: #052e16 !important; }
       .noleggio-card.non-rientrato { background: #422006 !important; }
       table { background: #1e293b !important; }
@@ -562,10 +563,21 @@ function renderMobileCards() {
     const costo = calcolaCosto(n);
     const incoerente = orarioIncoerente(n);
     const cardClass = incoerente ? 'row-warning' : (n.pagato ? 'pagato' : '');
-    const timerHtml = !n.ora_rientro ? `<span class="live-timer" data-ora-uscita="${esc(n.ora_uscita || '')}"></span>` : '';
     const tempoHtml = n.ora_uscita && n.ora_rientro ? formatTempo(((parseInt(n.ora_rientro.split(':')[0]) * 60 + parseInt(n.ora_rientro.split(':')[1])) - (parseInt(n.ora_uscita.split(':')[0]) * 60 + parseInt(n.ora_uscita.split(':')[1]))) / 60) : '';
+    if (n.ora_rientro && !n._expanded) {
+      cards += `
+        <div class="noleggio-card-compact" onclick="toggleCardExpand(${n.id})" style="border-left-color:#22c55e;">
+          <span class="orario">${esc(n.ora_uscita || '-')} <span class="freccia">→</span> ${esc(n.ora_rientro)}</span>
+          ${tempoHtml ? `<span style="font-size:12px;color:#6b7280;">${tempoHtml}</span>` : ''}
+          <span style="font-weight:700;color:${n.pagato ? '#16a34a' : '#dc2626'};">${costoDisplay(costo, n.tipologia)}</span>
+          <span>${n.pagato ? '✅' : '⬜'}</span>
+        </div>`;
+      return;
+    }
+    const timerHtml = !n.ora_rientro ? `<span class="live-timer" data-ora-uscita="${esc(n.ora_uscita || '')}"></span>` : '';
     cards += `
       <div class="noleggio-card ${cardClass}" style="border-left-color:${n.pagato ? '#22c55e' : (incoerente ? '#f59e0b' : '#e5e7eb')};">
+        ${n.ora_rientro ? `<div style="cursor:pointer;font-size:11px;color:#6b7280;margin-bottom:4px;" onclick="toggleCardExpand(${n.id})">▼ Premi per chiudere</div>` : ''}
         <div class="card-header">
           <span class="num">#${i + 1}</span>
           <span class="nome">${esc(n.nome_cognome)}</span>
@@ -595,6 +607,14 @@ function renderMobileCards() {
       </div>`;
   });
   return `<div class="mobile-only" style="margin-bottom:20px;">${cards}</div>`;
+}
+
+function toggleCardExpand(id) {
+  const n = noleggiCorrenti.find(x => x.id == id);
+  if (n) {
+    n._expanded = !n._expanded;
+    render();
+  }
 }
 
 async function aggiungiNoleggio() {
