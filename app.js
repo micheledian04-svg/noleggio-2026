@@ -491,7 +491,7 @@ function renderGiorno() {
           <button class="btn btn-success" style="margin-top:12px;width:100%;" onclick="aggiungiNoleggio()">➕ Aggiungi Noleggio</button>
         </div>` : ''}
         ${noleggiHtml}
-        <button class="mobile-only" onclick="apriModalNuovoNoleggio()" style="position:fixed;bottom:90px;right:16px;width:56px;height:56px;border-radius:50%;background:#16a34a;color:white;font-size:28px;border:none;box-shadow:0 4px 12px rgba(0,0,0,0.25);cursor:pointer;z-index:100;display:flex;align-items:center;justify-content:center;">+</button>
+        <button class="${showFormNoleggio ? 'mobile-only' : ''}" onclick="apriModalNuovoNoleggio()" style="position:fixed;bottom:90px;right:16px;width:56px;height:56px;border-radius:50%;background:#16a34a;color:white;font-size:28px;border:none;box-shadow:0 4px 12px rgba(0,0,0,0.25);cursor:pointer;z-index:100;display:flex;align-items:center;justify-content:center;">+</button>
       ` : `
         <div style="text-align:center;padding:60px 20px;color:#6b7280;">
           <div style="font-size:48px;margin-bottom:16px;">📅</div>
@@ -673,6 +673,7 @@ function apriModalNuovoNoleggio() {
       </div>
     </div>`;
   document.body.appendChild(overlay);
+  setupAutocomplete('modal-nome-cognome');
 }
 
 async function aggiungiNoleggioModal() {
