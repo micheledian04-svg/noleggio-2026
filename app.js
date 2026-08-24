@@ -146,8 +146,13 @@ function toggleAutoRefresh() {
     autoRefreshTimer = null;
   }
   if (autoRefreshSeconds > 0) {
-    autoRefreshTimer = setInterval(() => {
-      if (currentView === 'giorno') loadGiornoData();
+    autoRefreshTimer = setInterval(async () => {
+      if (currentView !== 'giorno') return;
+      const before = JSON.stringify(noleggiCorrenti);
+      await loadGiornoData();
+      if (JSON.stringify(noleggiCorrenti) !== before) {
+        render();
+      }
     }, autoRefreshSeconds * 1000);
   }
 }
