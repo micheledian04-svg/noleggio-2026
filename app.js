@@ -12,6 +12,7 @@ let autoRefreshTimer = null;
 let editingNoleggioId = null;
 let editingClienteId = null;
 let autocompleteTimer = null;
+let expandedCards = new Set();
 
 function esc(s) {
   if (s === null || s === undefined) return '';
@@ -564,9 +565,10 @@ function renderMobileCards() {
     const incoerente = orarioIncoerente(n);
     const cardClass = incoerente ? 'row-warning' : (n.pagato ? 'pagato' : '');
     const tempoHtml = n.ora_uscita && n.ora_rientro ? formatTempo(((parseInt(n.ora_rientro.split(':')[0]) * 60 + parseInt(n.ora_rientro.split(':')[1])) - (parseInt(n.ora_uscita.split(':')[0]) * 60 + parseInt(n.ora_uscita.split(':')[1]))) / 60) : '';
-    if (n.ora_rientro && !n._expanded) {
+    if (n.ora_rientro && !expandedCards.has(n.id)) {
       cards += `
         <div class="noleggio-card-compact" onclick="toggleCardExpand(${n.id})" style="border-left-color:#22c55e;">
+          <span style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100px;">${esc(n.nome_cognome)}</span>
           <span class="orario">${esc(n.ora_uscita || '-')} <span class="freccia">→</span> ${esc(n.ora_rientro)}</span>
           ${tempoHtml ? `<span style="font-size:12px;color:#6b7280;">${tempoHtml}</span>` : ''}
           <span style="font-weight:700;color:${n.pagato ? '#16a34a' : '#dc2626'};">${costoDisplay(costo, n.tipologia)}</span>
@@ -577,7 +579,7 @@ function renderMobileCards() {
     const timerHtml = !n.ora_rientro ? `<span class="live-timer" data-ora-uscita="${esc(n.ora_uscita || '')}"></span>` : '';
     cards += `
       <div class="noleggio-card ${cardClass}" style="border-left-color:${n.pagato ? '#22c55e' : (incoerente ? '#f59e0b' : '#e5e7eb')};">
-        ${n.ora_rientro ? `<div style="cursor:pointer;font-size:11px;color:#6b7280;margin-bottom:4px;" onclick="toggleCardExpand(${n.id})">▼ Premi per chiudere</div>` : ''}
+        ${n.ora_rientro && expandedCards.has(n.id) ? `<div style="cursor:pointer;font-size:11px;color:#6b7280;margin-bottom:4px;" onclick="toggleCardExpand(${n.id})">▲ Chiudi</div>` : ''}
         <div class="card-header">
           <span class="num">#${i + 1}</span>
           <span class="nome">${esc(n.nome_cognome)}</span>
@@ -606,15 +608,13 @@ function renderMobileCards() {
         </div>
       </div>`;
   });
-  return `<div class="mobile-only" style="margin-bottom:20px;">${cards}</div>`;
+  return `<div class="mobile-only" style="margin-bottom:20px;padding-bottom:100px;">${cards}</div>`;
 }
 
 function toggleCardExpand(id) {
-  const n = noleggiCorrenti.find(x => x.id == id);
-  if (n) {
-    n._expanded = !n._expanded;
-    render();
-  }
+  if (expandedCards.has(id)) expandedCards.delete(id);
+  else expandedCards.add(id);
+  render();
 }
 
 async function aggiungiNoleggio() {
